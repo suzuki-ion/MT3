@@ -110,12 +110,12 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MathFunctions\Matrix3x3.cpp" />
-    <ClCompile Include="MathFunctions\Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
-    <ClInclude Include="MathFunctions\Matrix3x3.h" />
+    <ClInclude Include="MathFunctions\AffineMatrix.h" />
+    <ClInclude Include="MathFunctions\Matrix4x4.h" />
+    <ClInclude Include="MathFunctions\MyMath.h" />
     <ClInclude Include="MathFunctions\Vector3.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

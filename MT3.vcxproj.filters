@@ -20,18 +20,14 @@
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp">
       <Filter>KamataEngine\Adapter</Filter>
     </ClCompile>
-    <ClCompile Include="MathFunctions\Vector3.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
-    <ClCompile Include="MathFunctions\Matrix3x3.cpp">
-      <Filter>KamataEngine</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
       <Filter>KamataEngine\Adapter</Filter>
     </ClInclude>
     <ClInclude Include="MathFunctions\Vector3.h" />
-    <ClInclude Include="MathFunctions\Matrix3x3.h" />
+    <ClInclude Include="MathFunctions\Matrix4x4.h" />
+    <ClInclude Include="MathFunctions\MyMath.h" />
+    <ClInclude Include="MathFunctions\AffineMatrix.h" />
   </ItemGroup>
 </Project>

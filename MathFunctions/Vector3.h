@@ -3,7 +3,6 @@
 #include <cmath>
 
 struct Vector3 {
-public:
     // 大量に呼び出されるであろうデフォルトコンストラクタは軽量化のため何もしないようにしておく
     Vector3() noexcept = default;
 
@@ -203,12 +202,12 @@ inline constexpr const Vector3 Vector3::Refrection(const Vector3 &normal) const 
 }
 
 inline constexpr const Vector3 Vector3::Refrection(const Vector3 &normal, const float eta) const noexcept {
-    const float cos_theta = Dot(normal);
-    const float k = 1.0f - eta * eta * (1.0f - cos_theta * cos_theta);
+    const float cosTheta = Dot(normal);
+    const float k = 1.0f - eta * eta * (1.0f - cosTheta * cosTheta);
     if (k < 0.0f) {
         return Vector3(0.0f);
     }
-    return *this * eta + (eta * cos_theta - std::sqrt(k)) * normal;
+    return *this * eta + (eta * cosTheta - std::sqrt(k)) * normal;
 }
 
 inline float Vector3::Distance(const Vector3 &vec) const {
