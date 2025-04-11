@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include <stdexcept>
-#include <cmath>
+
+struct Vector3;
 
 struct Matrix4x4 {
     // 大量に呼び出されるであろうデフォルトコンストラクタは軽量化のため何もしないようにしておく
@@ -26,11 +26,9 @@ struct Matrix4x4 {
                 {m10, m11}
             }
         {}
-
-        constexpr float Determinant() const noexcept {
-            return m[0][0] * m[1][1] - m[0][1] * m[1][0];
-        }
-
+        /// @brief 行列式を計算する
+        /// @return 行列式
+        [[nodiscard]] constexpr float Determinant() const noexcept;
     private:
         float m[2][2];
     };
@@ -47,270 +45,47 @@ struct Matrix4x4 {
                 {m20, m21, m22}
             }
         {}
-
-        constexpr float Determinant() const noexcept {
-            float c00 = Matrix2x2(m[1][1], m[1][2], m[2][1], m[2][2]).Determinant();
-            float c01 = -(Matrix2x2(m[1][0], m[1][2], m[2][0], m[2][2]).Determinant());
-            float c02 = Matrix2x2(m[1][0], m[1][1], m[2][0], m[2][1]).Determinant();
-            return m[0][0] * c00 + m[0][1] * c01 + m[0][2] * c02;
-        }
-
+        /// @brief 行列式を計算する
+        /// @return 行列式
+        [[nodiscard]] constexpr float Determinant() const noexcept;
     private:
         float m[3][3];
     };
 
-    Matrix4x4 &operator+=(const Matrix4x4 &mat) noexcept {
-        // 少しでも速度を稼ぐためにループではなく展開する
-        m[0][0] += mat.m[0][0];
-        m[0][1] += mat.m[0][1];
-        m[0][2] += mat.m[0][2];
-        m[0][3] += mat.m[0][3];
-
-        m[1][0] += mat.m[1][0];
-        m[1][1] += mat.m[1][1];
-        m[1][2] += mat.m[1][2];
-        m[1][3] += mat.m[1][3];
-
-        m[2][0] += mat.m[2][0];
-        m[2][1] += mat.m[2][1];
-        m[2][2] += mat.m[2][2];
-        m[2][3] += mat.m[2][3];
-
-        m[3][0] += mat.m[3][0];
-        m[3][1] += mat.m[3][1];
-        m[3][2] += mat.m[3][2];
-        m[3][3] += mat.m[3][3];
-
-        return *this;
-    }
-    Matrix4x4 &operator-=(const Matrix4x4 &mat) noexcept {
-        // 少しでも速度を稼ぐためにループではなく展開する
-        m[0][0] -= mat.m[0][0];
-        m[0][1] -= mat.m[0][1];
-        m[0][2] -= mat.m[0][2];
-        m[0][3] -= mat.m[0][3];
-
-        m[1][0] -= mat.m[1][0];
-        m[1][1] -= mat.m[1][1];
-        m[1][2] -= mat.m[1][2];
-        m[1][3] -= mat.m[1][3];
-        
-        m[2][0] -= mat.m[2][0];
-        m[2][1] -= mat.m[2][1];
-        m[2][2] -= mat.m[2][2];
-        m[2][3] -= mat.m[2][3];
-        
-        m[3][0] -= mat.m[3][0];
-        m[3][1] -= mat.m[3][1];
-        m[3][2] -= mat.m[3][2];
-        m[3][3] -= mat.m[3][3];
-        
-        return *this;
-    }
-    Matrix4x4 &operator*=(const float scalar) noexcept {
-        // 少しでも速度を稼ぐためにループではなく展開する
-        m[0][0] *= scalar;
-        m[0][1] *= scalar;
-        m[0][2] *= scalar;
-        m[0][3] *= scalar;
-
-        m[1][0] *= scalar;
-        m[1][1] *= scalar;
-        m[1][2] *= scalar;
-        m[1][3] *= scalar;
-        
-        m[2][0] *= scalar;
-        m[2][1] *= scalar;
-        m[2][2] *= scalar;
-        m[2][3] *= scalar;
-        
-        m[3][0] *= scalar;
-        m[3][1] *= scalar;
-        m[3][2] *= scalar;
-        m[3][3] *= scalar;
-        
-        return *this;
-    }
-    Matrix4x4 &operator*=(const Matrix4x4 &mat) noexcept {
-        *this = *this * mat;
-        return *this;
-    }
-
-    constexpr const Matrix4x4 operator+(const Matrix4x4 &mat) const noexcept {
-        // 少しでも速度を稼ぐためにループではなく展開する
-        return Matrix4x4(
-            m[0][0] + mat.m[0][0], m[0][1] + mat.m[0][1], m[0][2] + mat.m[0][2], m[0][3] + mat.m[0][3],
-            m[1][0] + mat.m[1][0], m[1][1] + mat.m[1][1], m[1][2] + mat.m[1][2], m[1][3] + mat.m[1][3],
-            m[2][0] + mat.m[2][0], m[2][1] + mat.m[2][1], m[2][2] + mat.m[2][2], m[2][3] + mat.m[2][3],
-            m[3][0] + mat.m[3][0], m[3][1] + mat.m[3][1], m[3][2] + mat.m[3][2], m[3][3] + mat.m[3][3]
-        );
-    }
-    constexpr const Matrix4x4 operator-(const Matrix4x4 &mat) const noexcept {
-        // 少しでも速度を稼ぐためにループではなく展開する
-        return Matrix4x4(
-            m[0][0] - mat.m[0][0], m[0][1] - mat.m[0][1], m[0][2] - mat.m[0][2], m[0][3] - mat.m[0][3],
-            m[1][0] - mat.m[1][0], m[1][1] - mat.m[1][1], m[1][2] - mat.m[1][2], m[1][3] - mat.m[1][3],
-            m[2][0] - mat.m[2][0], m[2][1] - mat.m[2][1], m[2][2] - mat.m[2][2], m[2][3] - mat.m[2][3],
-            m[3][0] - mat.m[3][0], m[3][1] - mat.m[3][1], m[3][2] - mat.m[3][2], m[3][3] - mat.m[3][3]
-        );
-    }
-    constexpr const Matrix4x4 operator*(const float scalar) const noexcept {
-        // 少しでも速度を稼ぐためにループではなく展開する
-        return Matrix4x4(
-            m[0][0] * scalar, m[0][1] * scalar, m[0][2] * scalar, m[0][3] * scalar,
-            m[1][0] * scalar, m[1][1] * scalar, m[1][2] * scalar, m[1][3] * scalar,
-            m[2][0] * scalar, m[2][1] * scalar, m[2][2] * scalar, m[2][3] * scalar,
-            m[3][0] * scalar, m[3][1] * scalar, m[3][2] * scalar, m[3][3] * scalar
-        );
-    }
-    constexpr const Matrix4x4 operator*(const Matrix4x4 &mat) const noexcept {
-        // 少しでも速度を稼ぐためにループではなく展開する
-        return Matrix4x4(
-            m[0][0] * mat.m[0][0] + m[0][1] * mat.m[1][0] + m[0][2] * mat.m[2][0] + m[0][3] * mat.m[3][0],
-            m[0][0] * mat.m[0][1] + m[0][1] * mat.m[1][1] + m[0][2] * mat.m[2][1] + m[0][3] * mat.m[3][1],
-            m[0][0] * mat.m[0][2] + m[0][1] * mat.m[1][2] + m[0][2] * mat.m[2][2] + m[0][3] * mat.m[3][2],
-            m[0][0] * mat.m[0][3] + m[0][1] * mat.m[1][3] + m[0][2] * mat.m[2][3] + m[0][3] * mat.m[3][3],
-            m[1][0] * mat.m[0][0] + m[1][1] * mat.m[1][0] + m[1][2] * mat.m[2][0] + m[1][3] * mat.m[3][0],
-            m[1][0] * mat.m[0][1] + m[1][1] * mat.m[1][1] + m[1][2] * mat.m[2][1] + m[1][3] * mat.m[3][1],
-            m[1][0] * mat.m[0][2] + m[1][1] * mat.m[1][2] + m[1][2] * mat.m[2][2] + m[1][3] * mat.m[3][2],
-            m[1][0] * mat.m[0][3] + m[1][1] * mat.m[1][3] + m[1][2] * mat.m[2][3] + m[1][3] * mat.m[3][3],
-            m[2][0] * mat.m[0][0] + m[2][1] * mat.m[1][0] + m[2][2] * mat.m[2][0] + m[2][3] * mat.m[3][0],
-            m[2][0] * mat.m[0][1] + m[2][1] * mat.m[1][1] + m[2][2] * mat.m[2][1] + m[2][3] * mat.m[3][1],
-            m[2][0] * mat.m[0][2] + m[2][1] * mat.m[1][2] + m[2][2] * mat.m[2][2] + m[2][3] * mat.m[3][2],
-            m[2][0] * mat.m[0][3] + m[2][1] * mat.m[1][3] + m[2][2] * mat.m[2][3] + m[2][3] * mat.m[3][3],
-            m[3][0] * mat.m[0][0] + m[3][1] * mat.m[1][0] + m[3][2] * mat.m[2][0] + m[3][3] * mat.m[3][0],
-            m[3][0] * mat.m[0][1] + m[3][1] * mat.m[1][1] + m[3][2] * mat.m[2][1] + m[3][3] * mat.m[3][1],
-            m[3][0] * mat.m[0][2] + m[3][1] * mat.m[1][2] + m[3][2] * mat.m[2][2] + m[3][3] * mat.m[3][2],
-            m[3][0] * mat.m[0][3] + m[3][1] * mat.m[1][3] + m[3][2] * mat.m[2][3] + m[3][3] * mat.m[3][3]
-        );
-    }
+    Matrix4x4 &operator+=(const Matrix4x4 &mat) noexcept;
+    Matrix4x4 &operator-=(const Matrix4x4 &mat) noexcept;
+    Matrix4x4 &operator*=(const float scalar) noexcept;
+    Matrix4x4 &operator*=(const Matrix4x4 &mat) noexcept;
+    constexpr const Matrix4x4 operator+(const Matrix4x4 &mat) const noexcept;
+    constexpr const Matrix4x4 operator-(const Matrix4x4 &mat) const noexcept;
+    constexpr const Matrix4x4 operator*(const float scalar) const noexcept;
+    constexpr const Matrix4x4 operator*(const Matrix4x4 &mat) const noexcept;
 
     /// @brief 単位行列を取得する
     /// @return 単位行列
-    [[nodiscard]] inline static constexpr const Matrix4x4 Identity() noexcept {
-        return Matrix4x4(
-            1.0f, 0.0f, 0.0f, 0.0f,
-            0.0f, 1.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f,
-            0.0f, 0.0f, 0.0f, 1.0f
-        );
-    }
+    [[nodiscard]] inline static constexpr const Matrix4x4 Identity() noexcept;
+
     /// @brief 転置行列を取得する
     /// @return 転置行列
-    [[nodiscard]] constexpr const Matrix4x4 Transpose() noexcept {
-        return Matrix4x4(
-            m[0][0], m[1][0], m[2][0], m[3][0],
-            m[0][1], m[1][1], m[2][1], m[3][1],
-            m[0][2], m[1][2], m[2][2], m[3][2],
-            m[0][3], m[1][3], m[2][3], m[3][3]
-        );
-    }
+    [[nodiscard]] constexpr const Matrix4x4 Transpose() noexcept;
+
     /// @brief 行列式を計算する
     /// @return 行列式
-    [[nodiscard]] constexpr const float Determinant() const noexcept {
-        float c00 = Matrix3x3(
-            m[1][1], m[1][2], m[1][3],
-            m[2][1], m[2][2], m[2][3],
-            m[3][1], m[3][2], m[3][3]).Determinant();
-        float c01 = -(Matrix3x3(
-            m[1][0], m[1][2], m[1][3],
-            m[2][0], m[2][2], m[2][3],
-            m[3][0], m[3][2], m[3][3]).Determinant());
-        float c02 = Matrix3x3(
-            m[1][0], m[1][1], m[1][3],
-            m[2][0], m[2][1], m[2][3],
-            m[3][0], m[3][1], m[3][3]).Determinant();
-        float c03 = -(Matrix3x3(
-            m[1][0], m[1][1], m[1][2],
-            m[2][0], m[2][1], m[2][2],
-            m[3][0], m[3][1], m[3][2]).Determinant());
-        return (m[0][0] * c00) + (m[0][1] * c01) + (m[0][2] * c02) + (m[0][3] * c03);
-    }
+    [[nodiscard]] constexpr const float Determinant() const noexcept;
+
     /// @brief 逆行列を計算する
     /// @return 逆行列
-    [[nodiscard]] inline const Matrix4x4 Inverse() const {
-        float c00 = Matrix3x3(
-            m[1][1], m[1][2], m[1][3],
-            m[2][1], m[2][2], m[2][3],
-            m[3][1], m[3][2], m[3][3]).Determinant();
-        float c01 = -(Matrix3x3(
-            m[1][0], m[1][2], m[1][3],
-            m[2][0], m[2][2], m[2][3],
-            m[3][0], m[3][2], m[3][3]).Determinant());
-        float c02 = Matrix3x3(
-            m[1][0], m[1][1], m[1][3],
-            m[2][0], m[2][1], m[2][3],
-            m[3][0], m[3][1], m[3][3]).Determinant();
-        float c03 = -(Matrix3x3(
-            m[1][0], m[1][1], m[1][2],
-            m[2][0], m[2][1], m[2][2],
-            m[3][0], m[3][1], m[3][2]).Determinant());
+    [[nodiscard]] inline const Matrix4x4 Inverse() const;
 
-        float c10 = -(Matrix3x3(
-            m[0][1], m[0][2], m[0][3],
-            m[2][1], m[2][2], m[2][3],
-            m[3][1], m[3][2], m[3][3]).Determinant());
-        float c11 = Matrix3x3(
-            m[0][0], m[0][2], m[0][3],
-            m[2][0], m[2][2], m[2][3],
-            m[3][0], m[3][2], m[3][3]).Determinant();
-        float c12 = -(Matrix3x3(
-            m[0][0], m[0][1], m[0][3],
-            m[2][0], m[2][1], m[2][3],
-            m[3][0], m[3][1], m[3][3]).Determinant());
-        float c13 = Matrix3x3(
-            m[0][0], m[0][1], m[0][2],
-            m[2][0], m[2][1], m[2][2],
-            m[3][0], m[3][1], m[3][2]).Determinant();
+    /// @brief 平行移動行列を生成する
+    /// @param translate 平行移動ベクトル
+    /// @return 平行移動行列
+    [[nodiscard]] Matrix4x4 MakeTranslate(const Vector3 &translate) noexcept;
 
-        float c20 = Matrix3x3(
-            m[0][1], m[0][2], m[0][3],
-            m[1][1], m[1][2], m[1][3],
-            m[3][1], m[3][2], m[3][3]).Determinant();
-        float c21 = -(Matrix3x3(
-            m[0][0], m[0][2], m[0][3],
-            m[1][0], m[1][2], m[1][3],
-            m[3][0], m[3][2], m[3][3]).Determinant());
-        float c22 = Matrix3x3(
-            m[0][0], m[0][1], m[0][3],
-            m[1][0], m[1][1], m[1][3],
-            m[3][0], m[3][1], m[3][3]).Determinant();
-        float c23 = -(Matrix3x3(
-            m[0][0], m[0][1], m[0][2],
-            m[1][0], m[1][1], m[1][2],
-            m[3][0], m[3][1], m[3][2]).Determinant());
-
-        float c30 = -(Matrix3x3(
-            m[0][1], m[0][2], m[0][3],
-            m[1][1], m[1][2], m[1][3],
-            m[2][1], m[2][2], m[2][3]).Determinant());
-        float c31 = Matrix3x3(
-            m[0][0], m[0][2], m[0][3],
-            m[1][0], m[1][2], m[1][3],
-            m[2][0], m[2][2], m[2][3]).Determinant();
-        float c32 = -(Matrix3x3(
-            m[0][0], m[0][1], m[0][3],
-            m[1][0], m[1][1], m[1][3],
-            m[2][0], m[2][1], m[2][3]).Determinant());
-        float c33 = Matrix3x3(
-            m[0][0], m[0][1], m[0][2],
-            m[1][0], m[1][1], m[1][2],
-            m[2][0], m[2][1], m[2][2]).Determinant();
-
-        float det = 1.0f / (m[0][0] * c00 + m[0][1] * c01 + m[0][2] * c02 + m[0][3] * c03);
-        
-        return Matrix4x4(
-            c00 * det, c10 * det, c20 * det, c30 * det,
-            c01 * det, c11 * det, c21 * det, c31 * det,
-            c02 * det, c12 * det, c22 * det, c32 * det,
-            c03 * det, c13 * det, c23 * det, c33 * det
-        );
-    }
+    /// @brief 拡大縮小行列を生成する
+    /// @param scale 拡大縮小ベクトル
+    /// @return 拡大縮小行列
+    [[nodiscard]] Matrix4x4 MakeScale(const Vector3 &scale) noexcept;
 
     float m[4][4];
 };
-
-inline constexpr const Matrix4x4 operator*(const float scalar, const Matrix4x4 &mat) noexcept {
-    return mat * scalar;
-}
-

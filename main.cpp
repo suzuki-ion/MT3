@@ -1,5 +1,6 @@
 #include <Novice.h>
-#include "MathFunctions/MyMath.h"
+#include "MathFunctions/Vector3.h"
+#include "MathFunctions/Matrix4x4.h"
 #include "MathFunctions/ScreenPrintf.h"
 
 const char kWindowTitle[] = "LE2A_12_スズキ_イオン_MT3";
@@ -16,17 +17,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//--------- 変数 ---------//
 
-	Matrix4x4 m1(
-		3.2f, 0.7f, 9.6f, 4.4f,
-		5.5f, 1.3f, 7.8f, 2.1f,
-		6.9f, 8.0f, 2.6f, 1.0f,
-		0.5f, 7.2f, 5.1f, 3.3f
-	);
-	Matrix4x4 m2(
-		4.1f, 6.5f, 3.3f, 2.2f,
-		8.8f, 0.6f, 9.9f, 7.7f,
-		1.1f, 5.5f, 6.6f, 0.0f,
-		3.3f, 9.9f, 8.8f, 2.2f
+    Vector3 translate(4.1f, 2.6f, 0.8f);
+    Vector3 scale(1.5f, 5.2f, 7.3f);
+    Vector3 point(2.3f, 3.8f, 1.4f);
+	Matrix4x4 transformMatrix(
+		1.0f, 2.0f, 3.0f, 4.0f,
+		3.0f, 1.0f, 1.0f, 2.0f,
+		1.0f, 4.0f, 2.0f, 3.0f,
+		2.0f, 2.0f, 1.0f, 3.0f
 	);
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -50,14 +48,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		MatrixScreenPrintf(0, 0, m1 + m2);
-		MatrixScreenPrintf(0, 80, m1 - m2);
-		MatrixScreenPrintf(0, 160, m1 * m2);
-		MatrixScreenPrintf(0, 240, m1.Inverse());
-		MatrixScreenPrintf(0, 320, m2.Inverse());
-		MatrixScreenPrintf(320, 0, m1.Transpose());
-		MatrixScreenPrintf(320, 80, m2.Transpose());
-        MatrixScreenPrintf(320, 160, Matrix4x4::Identity());
+        VectorScreenPrintf(0, 0, point.Transform(transformMatrix), "transformed");
+        MatrixScreenPrintf(0, 16 * 2, Matrix4x4().MakeTranslate(translate), "translateMatrix");
+        MatrixScreenPrintf(0, 16 * 7, Matrix4x4().MakeScale(scale), "scaleMatrix");
 
 		///
 		/// ↑描画処理ここまで

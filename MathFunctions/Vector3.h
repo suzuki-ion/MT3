@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <cmath>
 
+struct Matrix4x4;
+
 struct Vector3 {
     // 大量に呼び出されるであろうデフォルトコンストラクタは軽量化のため何もしないようにしておく
     Vector3() noexcept = default;
@@ -10,97 +12,35 @@ struct Vector3 {
     explicit constexpr Vector3(float v) noexcept : x(v), y(v), z(v) {}
     Vector3(const Vector3 &vec) : x(vec.x), y(vec.y), z(vec.z) {}
 
-    Vector3 &operator=(const Vector3 &vec) noexcept {
-        x = vec.x;
-        y = vec.y;
-        z = vec.z;
-        return *this;
-    }
-
-    float operator[](const int index) const noexcept {
-        return (&x)[index];
-    }
-
-    float &operator[](const int index) noexcept {
-        return (&x)[index];
-    }
-
-    Vector3 &operator+=(const Vector3 &vec) noexcept {
-        x += vec.x;
-        y += vec.y;
-        z += vec.z;
-        return *this;
-    }
-
-    Vector3 &operator-=(const Vector3 &vec) noexcept {
-        x -= vec.x;
-        y -= vec.y;
-        z -= vec.z;
-        return *this;
-    }
-
-    Vector3 &operator*=(const float scalar) noexcept {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-        return *this;
-    }
-
-    Vector3 &operator*=(const Vector3 &vec) noexcept {
-        x *= vec.x;
-        y *= vec.y;
-        z *= vec.z;
-        return *this;
-    }
-
-    Vector3 &operator/=(const float scalar) {
-        return *this *= (1.0f / scalar);
-    }
-
-    Vector3 &operator/=(const Vector3 &vec) {
-        x /= vec.x;
-        y /= vec.y;
-        z /= vec.z;
-        return *this;
-    }
-
-    bool operator==(const Vector3 &vec) const noexcept {
-        return x == vec.x && y == vec.y && z == vec.z;
-    }
-
-    bool operator!=(const Vector3 &vec) const noexcept {
-        return x != vec.x || y != vec.y || z != vec.z;
-    }
+    float operator[](const int index) const noexcept;
+    float &operator[](const int index) noexcept;
+    Vector3 &operator=(const Vector3 &vec) noexcept;
+    Vector3 &operator+=(const Vector3 &vec) noexcept;
+    Vector3 &operator-=(const Vector3 &vec) noexcept;
+    Vector3 &operator*=(const float scalar) noexcept;
+    Vector3 &operator*=(const Vector3 &vec) noexcept;
+    Vector3 &operator/=(const float scalar);
+    Vector3 &operator/=(const Vector3 &vec);
+    bool operator==(const Vector3 &vec) const noexcept;
+    bool operator!=(const Vector3 &vec) const noexcept;
 
     /// @brief ベクトルの内積を計算する
     /// @param vec 内積を計算するベクトル
     /// @return 内積
-    [[nodiscard]] constexpr float Dot(const Vector3 &vec) const noexcept {
-        return x * vec.x + y * vec.y + z * vec.z;
-    }
+    [[nodiscard]] constexpr float Dot(const Vector3 &vec) const noexcept;
 
     /// @brief ベクトルの外積を計算する
     /// @param vec 外積を計算するベクトル
     /// @return 外積
-    [[nodiscard]] constexpr const Vector3 Cross(const Vector3 &vec) const noexcept {
-        return Vector3(
-            y * vec.z - z * vec.y,
-            z * vec.x - x * vec.z,
-            x * vec.y - y * vec.x
-        );
-    }
+    [[nodiscard]] constexpr const Vector3 Cross(const Vector3 &vec) const noexcept;
 
     /// @brief ベクトルの長さを計算する
     /// @return ベクトルの長さ
-    [[nodiscard]] float Length() const noexcept {
-        return std::sqrt(LengthSquared());
-    }
+    [[nodiscard]] float Length() const noexcept;
 
     /// @brief ベクトルの長さの二乗を計算する
     /// @return ベクトルの長さの二乗
-    [[nodiscard]] constexpr float LengthSquared() const noexcept {
-        return Dot(*this);
-    }
+    [[nodiscard]] constexpr float LengthSquared() const noexcept;
 
     /// @brief ベクトルを正規化する
     /// @return 正規化されたベクトル
@@ -132,72 +72,16 @@ struct Vector3 {
     /// @return ベクトル間の距離
     [[nodiscard]] inline float Distance(const Vector3 &vec) const;
 
+    /// @brief ベクトルを行列で変換する
+    /// @param mat 変換行列
+    /// @return 変換されたベクトル
+    [[nodiscard]] Vector3 Transform(const Matrix4x4 &mat) const noexcept;
+
     float x;
     float y;
     float z;
 };
 
-inline constexpr const Vector3 operator-(const Vector3 &vec) noexcept {
-    return Vector3(-vec.x, -vec.y, -vec.z);
-}
+inline constexpr const Vector3 operator*(const Matrix4x4 &mat, const Vector3 &vec) noexcept;
 
-inline constexpr const Vector3 operator+(const Vector3 &vec1, const Vector3 &vec2) noexcept {
-    return Vector3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
-}
-
-inline constexpr const Vector3 operator-(const Vector3 &vec1, const Vector3 &vec2) noexcept {
-    return Vector3(vec1.x - vec2.x, vec1.y - vec2.y, vec1.z - vec2.z);
-}
-
-inline constexpr const Vector3 operator*(const Vector3 &vec, const float scalar) noexcept {
-    return Vector3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
-}
-
-inline constexpr const Vector3 operator*(const float scalar, const Vector3 &vec) noexcept {
-    return Vector3(vec.x * scalar, vec.y * scalar, vec.z * scalar);
-}
-
-inline constexpr const Vector3 operator*(const Vector3 &vec1, const Vector3 &vec2) noexcept {
-    return Vector3(vec1.x * vec2.x, vec1.y * vec2.y, vec1.z * vec2.z);
-}
-
-inline constexpr const Vector3 operator/(const Vector3 &vec, const float scalar) {
-    return vec * (1.0f / scalar);
-}
-
-inline constexpr const Vector3 operator/(const Vector3 &vec1, const Vector3 &vec2) {
-    return Vector3(vec1.x / vec2.x, vec1.y / vec2.y, vec1.z / vec2.z);
-}
-
-inline const Vector3 Vector3::Normalize() const {
-    const float length = Length();
-    if (length == 0.0f) {
-        throw std::runtime_error("Vector3::Normalize() : Division by zero");
-    }
-    return *this / length;
-}
-
-inline constexpr const Vector3 Vector3::Projection(const Vector3 &vec) const noexcept {
-    return vec * (Dot(vec) / vec.Dot(vec)) * vec;
-}
-
-inline constexpr const Vector3 Vector3::Rejection(const Vector3 &vec) const noexcept {
-    return *this - Projection(vec);
-}
-
-inline constexpr const Vector3 Vector3::Refrection(const Vector3 &normal) const noexcept {
-    return *this + (-2.0f * Dot(normal) * normal);
-}
-
-inline constexpr const Vector3 Vector3::Refrection(const Vector3 &normal, const float eta) const noexcept {
-    const float cosTheta = Dot(normal);
-    const float k = 1.0f - eta * eta * (1.0f - cosTheta * cosTheta);
-    if (k < 0.0f) {
-        return Vector3(0.0f);
-    }
-    return *this * eta + (eta * cosTheta - std::sqrt(k)) * normal;
-}
-
-inline float Vector3::Distance(const Vector3 &vec) const {
-    return (vec - *this).Length();
-}
+inline constexpr const Vector3 operator*(const Vector3 &vec, const Matrix4x4 &mat) noexcept;
