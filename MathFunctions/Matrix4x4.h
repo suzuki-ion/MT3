@@ -87,5 +87,35 @@ struct Matrix4x4 {
     /// @return 拡大縮小行列
     [[nodiscard]] Matrix4x4 MakeScale(const Vector3 &scale) noexcept;
 
+    /// @brief 回転行列を生成する
+    /// @param rotate 回転角度
+    /// @return 回転行列
+    [[nodiscard]] Matrix4x4 MakeRotate(const Vector3 &rotate) noexcept;
+
+    /// @brief 回転行列を生成する
+    /// @param radianX 回転角度 X
+    /// @param radianY 回転角度 Y
+    /// @param radianZ 回転角度 Z
+    /// @return 回転行列
+    [[nodiscard]] Matrix4x4 MakeRotate(
+        const float radianX,
+        const float radianY,
+        const float radianZ) noexcept;
+
+    /// @brief X軸回転行列を生成する
+    /// @param radian 回転角度
+    /// @return X軸回転行列
+    [[nodiscard]] Matrix4x4 MakeRotateX(const float radian) noexcept;
+
+    /// @brief Y軸回転行列を生成する
+    /// @param radian 回転角度
+    /// @return Y軸回転行列
+    [[nodiscard]] Matrix4x4 MakeRotateY(const float radian) noexcept;
+
+    /// @brief Z軸回転行列を生成する
+    /// @param radian 回転角度
+    /// @return Z軸回転行列
+    [[nodiscard]] Matrix4x4 MakeRotateZ(const float radian) noexcept;
+
     float m[4][4];
 };

@@ -283,3 +283,38 @@ Matrix4x4 Matrix4x4::MakeScale(const Vector3 &scale) noexcept {
     );
 }
 
+Matrix4x4 Matrix4x4::MakeRotate(const Vector3 &rotate) noexcept {
+    return MakeRotateX(rotate.x) * MakeRotateY(rotate.y) * MakeRotateZ(rotate.z);
+}
+
+Matrix4x4 Matrix4x4::MakeRotate(const float radianX, const float radianY, const float radianZ) noexcept {
+    return MakeRotateX(radianX) * MakeRotateY(radianY) * MakeRotateZ(radianZ);
+}
+
+Matrix4x4 Matrix4x4::MakeRotateX(const float radian) noexcept {
+    return Matrix4x4(
+        1.0f,   0.0f,               0.0f,               0.0f,
+        0.0f,   std::cos(radian),   std::sin(radian),   0.0f,
+        0.0f,   -std::sin(radian),  std::cos(radian),   0.0f,
+        0.0f,   0.0f,               0.0f,               1.0f
+    );
+}
+
+Matrix4x4 Matrix4x4::MakeRotateY(const float radian) noexcept {
+    return Matrix4x4(
+        std::cos(radian),   0.0f,   -std::sin(radian),  0.0f,
+        0.0f,               1.0f,   0.0f,               0.0f,
+        std::sin(radian),   0.0f,   std::cos(radian),   0.0f,
+        0.0f,               0.0f,   0.0f,               1.0f
+    );
+}
+
+Matrix4x4 Matrix4x4::MakeRotateZ(const float radian) noexcept {
+    return Matrix4x4(
+        std::cos(radian),   std::sin(radian),   0.0f,   0.0f,
+        -std::sin(radian),  std::cos(radian),   0.0f,   0.0f,
+        0.0f,               0.0f,               1.0f,   0.0f,
+        0.0f,               0.0f,               0.0f,   1.0f
+    );
+}
+
