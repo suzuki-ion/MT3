@@ -16,9 +16,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//--------- 変数 ---------//
 
-	Vector3 v1(1.0f, 3.0f, -5.0f);
-	Vector3 v2(4.0f, -1.0f, 2.0f);
-	float k = 4.0f;
+	Matrix4x4 m1(
+		3.2f, 0.7f, 9.6f, 4.4f,
+		5.5f, 1.3f, 7.8f, 2.1f,
+		6.9f, 8.0f, 2.6f, 1.0f,
+		0.5f, 7.2f, 5.1f, 3.3f
+	);
+	Matrix4x4 m2(
+		4.1f, 6.5f, 3.3f, 2.2f,
+		8.8f, 0.6f, 9.9f, 7.7f,
+		1.1f, 5.5f, 6.6f, 0.0f,
+		3.3f, 9.9f, 8.8f, 2.2f
+	);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -41,12 +50,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-		VectorScreenPrintf(0, 0, v1 + v2);
-		VectorScreenPrintf(0, 16, v1 - v2);
-		VectorScreenPrintf(0, 32, k * v1);
-		Novice::ScreenPrintf(0, 48, "%.02f", v1.Dot(v2));
-		Novice::ScreenPrintf(0, 64, "%.02f", v1.Length());
-		VectorScreenPrintf(0, 80, v2.Normalize());
+		MatrixScreenPrintf(0, 0, m1 + m2);
+		MatrixScreenPrintf(0, 80, m1 - m2);
+		MatrixScreenPrintf(0, 160, m1 * m2);
+		MatrixScreenPrintf(0, 240, m1.Inverse());
+		MatrixScreenPrintf(0, 320, m2.Inverse());
+		MatrixScreenPrintf(320, 0, m1.Transpose());
+		MatrixScreenPrintf(320, 80, m2.Transpose());
+        MatrixScreenPrintf(320, 160, Matrix4x4::Identity());
 
 		///
 		/// ↑描画処理ここまで
