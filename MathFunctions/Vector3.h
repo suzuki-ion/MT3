@@ -82,6 +82,13 @@ struct Vector3 {
     float z;
 };
 
+inline constexpr const Vector3 operator-(const Vector3 &vec) noexcept;
+inline constexpr const Vector3 operator+(const Vector3 &vec1, const Vector3 &vec2) noexcept;
+inline constexpr const Vector3 operator-(const Vector3 &vec1, const Vector3 &vec2) noexcept;
+inline constexpr const Vector3 operator*(const Vector3 &vec, const float scalar) noexcept;
+inline constexpr const Vector3 operator*(const float scalar, const Vector3 &vec) noexcept;
+inline constexpr const Vector3 operator*(const Vector3 &vec1, const Vector3 &vec2) noexcept;
+inline constexpr const Vector3 operator/(const Vector3 &vec, const float scalar);
+inline constexpr const Vector3 operator/(const Vector3 &vec1, const Vector3 &vec2);
 inline constexpr const Vector3 operator*(const Matrix4x4 &mat, const Vector3 &vec) noexcept;
-
 inline constexpr const Vector3 operator*(const Vector3 &vec, const Matrix4x4 &mat) noexcept;

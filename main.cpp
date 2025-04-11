@@ -1,6 +1,8 @@
 #include <Novice.h>
 #include "MathFunctions/Vector3.h"
 #include "MathFunctions/Matrix4x4.h"
+#include "MathFunctions/AffineMatrix.h"
+#include "MathFunctions/RenderingPipeline.h"
 #include "MathFunctions/ScreenPrintf.h"
 
 const char kWindowTitle[] = "LE2A_12_スズキ_イオン_MT3";
@@ -20,6 +22,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	Vector3 scale(1.2f, 0.79f, -2.1f);
     Vector3 rotate(0.4f, 1.43f, -0.8f);
     Vector3 translate(2.7f, -4.15f, 1.57f);
+    AffineMatrix affineMatrix(scale, rotate, translate);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -42,7 +45,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-        MatrixScreenPrintf(0, 0, Matrix4x4().MakeAffine(scale, rotate, translate), "worldMatrix");
+        MatrixScreenPrintf(
+			0, 0,
+			MakeOrthographicMatrix(-160.0f, 160.0f, 200.0f, 300.0f, 0.0f, 1000.0f),
+			"orthographicsMatrix"
+		);
+        MatrixScreenPrintf(0, 16 * 5,
+			MakePerspectiveFovMatrix(0.63f, 1.33f, 0.1f, 1000.0f),
+			"perspectiveFovMatrix"
+		);
+        MatrixScreenPrintf(0, 16 * 10,
+			MakeViewportMatrix(100.0f, 200.0f, 600.0f, 300.0f, 0.0f, 1.0f),
+			"viewportMatrix"
+		);
 
 		///
 		/// ↑描画処理ここまで
