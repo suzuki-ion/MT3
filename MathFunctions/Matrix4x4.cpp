@@ -318,3 +318,7 @@ Matrix4x4 Matrix4x4::MakeRotateZ(const float radian) noexcept {
     );
 }
 
+Matrix4x4 Matrix4x4::MakeAffine(const Vector3 &scale, const Vector3 &rotate, const Vector3 &translate) noexcept {
+    return MakeScale(scale) * MakeRotate(rotate) * MakeTranslate(translate);
+}
+

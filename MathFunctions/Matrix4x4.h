@@ -117,5 +117,15 @@ struct Matrix4x4 {
     /// @return Z軸回転行列
     [[nodiscard]] Matrix4x4 MakeRotateZ(const float radian) noexcept;
 
+    /// @brief アフィン行列を生成する
+    /// @param scale 拡大縮小ベクトル
+    /// @param rotate 回転角度
+    /// @param translate 平行移動ベクトル
+    /// @return アフィン行列
+    [[nodiscard]] Matrix4x4 MakeAffine(
+        const Vector3 &scale,
+        const Vector3 &rotate,
+        const Vector3 &translate) noexcept;
+
     float m[4][4];
 };

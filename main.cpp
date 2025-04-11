@@ -17,7 +17,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//--------- 変数 ---------//
 
-	Vector3 rotate(0.4f, 1.43f, -0.8f);
+	Vector3 scale(1.2f, 0.79f, -2.1f);
+    Vector3 rotate(0.4f, 1.43f, -0.8f);
+    Vector3 translate(2.7f, -4.15f, 1.57f);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -40,10 +42,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-        MatrixScreenPrintf(0, 0, Matrix4x4().MakeRotateX(rotate.x), "rotateXMatrix");
-        MatrixScreenPrintf(0, 16 * 5, Matrix4x4().MakeRotateY(rotate.y), "rotateYMatrix");
-        MatrixScreenPrintf(0, 16 * 10, Matrix4x4().MakeRotateZ(rotate.z), "rotateZMatrix");
-        MatrixScreenPrintf(0, 16 * 15, Matrix4x4().MakeRotate(rotate), "rotateXYZMatrix");
+        MatrixScreenPrintf(0, 0, Matrix4x4().MakeAffine(scale, rotate, translate), "worldMatrix");
 
 		///
 		/// ↑描画処理ここまで
