@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include <stdexcept>
 #include <cmath>
 
 struct Matrix4x4 {
-    // ‘å—Ê‚ÉŒÄ‚Ño‚³‚ê‚é‚Å‚ ‚ë‚¤ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÍŒy—Ê‰»‚Ì‚½‚ß‰½‚à‚µ‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¨‚­
+    // å¤§é‡ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ã§ã‚ã‚ã†ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯è»½é‡åŒ–ã®ãŸã‚ä½•ã‚‚ã—ãªã„ã‚ˆã†ã«ã—ã¦ãŠã
     Matrix4x4() noexcept = default;
     constexpr Matrix4x4(
         float m00, float m01, float m02, float m03,
@@ -18,7 +18,7 @@ struct Matrix4x4 {
         }
     {}
 
-    // s—ñ®ŒvZ—p‚Ì2x2s—ñ
+    // è¡Œåˆ—å¼è¨ˆç®—ç”¨ã®2x2è¡Œåˆ—
     struct Matrix2x2 {
         constexpr Matrix2x2(float m00, float m01, float m10, float m11) noexcept
             : m{
@@ -35,7 +35,7 @@ struct Matrix4x4 {
         float m[2][2];
     };
 
-    // s—ñ®ŒvZ—p‚Ì3x3s—ñ
+    // è¡Œåˆ—å¼è¨ˆç®—ç”¨ã®3x3è¡Œåˆ—
     struct Matrix3x3 {
         constexpr Matrix3x3(
             float m00, float m01, float m02,
@@ -60,7 +60,7 @@ struct Matrix4x4 {
     };
 
     Matrix4x4 &operator+=(const Matrix4x4 &mat) noexcept {
-        // ­‚µ‚Å‚à‘¬“x‚ğ‰Ò‚®‚½‚ß‚Éƒ‹[ƒv‚Å‚Í‚È‚­“WŠJ‚·‚é
+        // å°‘ã—ã§ã‚‚é€Ÿåº¦ã‚’ç¨¼ããŸã‚ã«ãƒ«ãƒ¼ãƒ—ã§ã¯ãªãå±•é–‹ã™ã‚‹
         m[0][0] += mat.m[0][0];
         m[0][1] += mat.m[0][1];
         m[0][2] += mat.m[0][2];
@@ -84,7 +84,7 @@ struct Matrix4x4 {
         return *this;
     }
     Matrix4x4 &operator-=(const Matrix4x4 &mat) noexcept {
-        // ­‚µ‚Å‚à‘¬“x‚ğ‰Ò‚®‚½‚ß‚Éƒ‹[ƒv‚Å‚Í‚È‚­“WŠJ‚·‚é
+        // å°‘ã—ã§ã‚‚é€Ÿåº¦ã‚’ç¨¼ããŸã‚ã«ãƒ«ãƒ¼ãƒ—ã§ã¯ãªãå±•é–‹ã™ã‚‹
         m[0][0] -= mat.m[0][0];
         m[0][1] -= mat.m[0][1];
         m[0][2] -= mat.m[0][2];
@@ -108,7 +108,7 @@ struct Matrix4x4 {
         return *this;
     }
     Matrix4x4 &operator*=(const float scalar) noexcept {
-        // ­‚µ‚Å‚à‘¬“x‚ğ‰Ò‚®‚½‚ß‚Éƒ‹[ƒv‚Å‚Í‚È‚­“WŠJ‚·‚é
+        // å°‘ã—ã§ã‚‚é€Ÿåº¦ã‚’ç¨¼ããŸã‚ã«ãƒ«ãƒ¼ãƒ—ã§ã¯ãªãå±•é–‹ã™ã‚‹
         m[0][0] *= scalar;
         m[0][1] *= scalar;
         m[0][2] *= scalar;
@@ -137,7 +137,7 @@ struct Matrix4x4 {
     }
 
     constexpr const Matrix4x4 operator+(const Matrix4x4 &mat) const noexcept {
-        // ­‚µ‚Å‚à‘¬“x‚ğ‰Ò‚®‚½‚ß‚Éƒ‹[ƒv‚Å‚Í‚È‚­“WŠJ‚·‚é
+        // å°‘ã—ã§ã‚‚é€Ÿåº¦ã‚’ç¨¼ããŸã‚ã«ãƒ«ãƒ¼ãƒ—ã§ã¯ãªãå±•é–‹ã™ã‚‹
         return Matrix4x4(
             m[0][0] + mat.m[0][0], m[0][1] + mat.m[0][1], m[0][2] + mat.m[0][2], m[0][3] + mat.m[0][3],
             m[1][0] + mat.m[1][0], m[1][1] + mat.m[1][1], m[1][2] + mat.m[1][2], m[1][3] + mat.m[1][3],
@@ -146,7 +146,7 @@ struct Matrix4x4 {
         );
     }
     constexpr const Matrix4x4 operator-(const Matrix4x4 &mat) const noexcept {
-        // ­‚µ‚Å‚à‘¬“x‚ğ‰Ò‚®‚½‚ß‚Éƒ‹[ƒv‚Å‚Í‚È‚­“WŠJ‚·‚é
+        // å°‘ã—ã§ã‚‚é€Ÿåº¦ã‚’ç¨¼ããŸã‚ã«ãƒ«ãƒ¼ãƒ—ã§ã¯ãªãå±•é–‹ã™ã‚‹
         return Matrix4x4(
             m[0][0] - mat.m[0][0], m[0][1] - mat.m[0][1], m[0][2] - mat.m[0][2], m[0][3] - mat.m[0][3],
             m[1][0] - mat.m[1][0], m[1][1] - mat.m[1][1], m[1][2] - mat.m[1][2], m[1][3] - mat.m[1][3],
@@ -155,7 +155,7 @@ struct Matrix4x4 {
         );
     }
     constexpr const Matrix4x4 operator*(const float scalar) const noexcept {
-        // ­‚µ‚Å‚à‘¬“x‚ğ‰Ò‚®‚½‚ß‚Éƒ‹[ƒv‚Å‚Í‚È‚­“WŠJ‚·‚é
+        // å°‘ã—ã§ã‚‚é€Ÿåº¦ã‚’ç¨¼ããŸã‚ã«ãƒ«ãƒ¼ãƒ—ã§ã¯ãªãå±•é–‹ã™ã‚‹
         return Matrix4x4(
             m[0][0] * scalar, m[0][1] * scalar, m[0][2] * scalar, m[0][3] * scalar,
             m[1][0] * scalar, m[1][1] * scalar, m[1][2] * scalar, m[1][3] * scalar,
@@ -164,7 +164,7 @@ struct Matrix4x4 {
         );
     }
     constexpr const Matrix4x4 operator*(const Matrix4x4 &mat) const noexcept {
-        // ­‚µ‚Å‚à‘¬“x‚ğ‰Ò‚®‚½‚ß‚Éƒ‹[ƒv‚Å‚Í‚È‚­“WŠJ‚·‚é
+        // å°‘ã—ã§ã‚‚é€Ÿåº¦ã‚’ç¨¼ããŸã‚ã«ãƒ«ãƒ¼ãƒ—ã§ã¯ãªãå±•é–‹ã™ã‚‹
         return Matrix4x4(
             m[0][0] * mat.m[0][0] + m[0][1] * mat.m[1][0] + m[0][2] * mat.m[2][0] + m[0][3] * mat.m[3][0],
             m[0][0] * mat.m[0][1] + m[0][1] * mat.m[1][1] + m[0][2] * mat.m[2][1] + m[0][3] * mat.m[3][1],
@@ -185,8 +185,8 @@ struct Matrix4x4 {
         );
     }
 
-    /// @brief ’PˆÊs—ñ‚ğæ“¾‚·‚é
-    /// @return ’PˆÊs—ñ
+    /// @brief å˜ä½è¡Œåˆ—ã‚’å–å¾—ã™ã‚‹
+    /// @return å˜ä½è¡Œåˆ—
     [[nodiscard]] inline static constexpr const Matrix4x4 Identity() noexcept {
         return Matrix4x4(
             1.0f, 0.0f, 0.0f, 0.0f,
@@ -195,18 +195,18 @@ struct Matrix4x4 {
             0.0f, 0.0f, 0.0f, 1.0f
         );
     }
-    /// @brief “]’us—ñ‚ğæ“¾‚·‚é
-    /// @return “]’us—ñ
-    [[nodiscard]] inline static constexpr const Matrix4x4 Transpose(const Matrix4x4 &mat) noexcept {
+    /// @brief è»¢ç½®è¡Œåˆ—ã‚’å–å¾—ã™ã‚‹
+    /// @return è»¢ç½®è¡Œåˆ—
+    [[nodiscard]] constexpr const Matrix4x4 Transpose() noexcept {
         return Matrix4x4(
-            mat.m[0][0], mat.m[1][0], mat.m[2][0], mat.m[3][0],
-            mat.m[0][1], mat.m[1][1], mat.m[2][1], mat.m[3][1],
-            mat.m[0][2], mat.m[1][2], mat.m[2][2], mat.m[3][2],
-            mat.m[0][3], mat.m[1][3], mat.m[2][3], mat.m[3][3]
+            m[0][0], m[1][0], m[2][0], m[3][0],
+            m[0][1], m[1][1], m[2][1], m[3][1],
+            m[0][2], m[1][2], m[2][2], m[3][2],
+            m[0][3], m[1][3], m[2][3], m[3][3]
         );
     }
-    /// @brief s—ñ®‚ğŒvZ‚·‚é
-    /// @return s—ñ®
+    /// @brief è¡Œåˆ—å¼ã‚’è¨ˆç®—ã™ã‚‹
+    /// @return è¡Œåˆ—å¼
     [[nodiscard]] constexpr const float Determinant() const noexcept {
         float c00 = Matrix3x3(
             m[1][1], m[1][2], m[1][3],
@@ -226,8 +226,8 @@ struct Matrix4x4 {
             m[3][0], m[3][1], m[3][2]).Determinant());
         return (m[0][0] * c00) + (m[0][1] * c01) + (m[0][2] * c02) + (m[0][3] * c03);
     }
-    /// @brief ‹ts—ñ‚ğŒvZ‚·‚é
-    /// @return ‹ts—ñ
+    /// @brief é€†è¡Œåˆ—ã‚’è¨ˆç®—ã™ã‚‹
+    /// @return é€†è¡Œåˆ—
     [[nodiscard]] inline const Matrix4x4 Inverse() const {
         float c00 = Matrix3x3(
             m[1][1], m[1][2], m[1][3],

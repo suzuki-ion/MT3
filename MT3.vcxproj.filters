@@ -20,6 +20,9 @@
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp">
       <Filter>KamataEngine\Adapter</Filter>
     </ClCompile>
+    <ClCompile Include="MathFunctions\ScreenPrintf.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
@@ -29,5 +32,6 @@
     <ClInclude Include="MathFunctions\Matrix4x4.h" />
     <ClInclude Include="MathFunctions\MyMath.h" />
     <ClInclude Include="MathFunctions\AffineMatrix.h" />
+    <ClInclude Include="MathFunctions\ScreenPrintf.h" />
   </ItemGroup>
 </Project>

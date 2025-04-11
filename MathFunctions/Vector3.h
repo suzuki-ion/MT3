@@ -1,9 +1,9 @@
-#pragma once
+ï»¿#pragma once
 #include <stdexcept>
 #include <cmath>
 
 struct Vector3 {
-    // ‘å—Ê‚ÉŒÄ‚Ño‚³‚ê‚é‚Å‚ ‚ë‚¤ƒfƒtƒHƒ‹ƒgƒRƒ“ƒXƒgƒ‰ƒNƒ^‚ÍŒy—Ê‰»‚Ì‚½‚ß‰½‚à‚µ‚È‚¢‚æ‚¤‚É‚µ‚Ä‚¨‚­
+    // å¤§é‡ã«å‘¼ã³å‡ºã•ã‚Œã‚‹ã§ã‚ã‚ã†ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã¯è»½é‡åŒ–ã®ãŸã‚ä½•ã‚‚ã—ãªã„ã‚ˆã†ã«ã—ã¦ãŠã
     Vector3() noexcept = default;
 
     constexpr Vector3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
@@ -72,16 +72,16 @@ struct Vector3 {
         return x != vec.x || y != vec.y || z != vec.z;
     }
 
-    /// @brief ƒxƒNƒgƒ‹‚Ì“àÏ‚ğŒvZ‚·‚é
-    /// @param vec “àÏ‚ğŒvZ‚·‚éƒxƒNƒgƒ‹
-    /// @return “àÏ
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã®å†…ç©ã‚’è¨ˆç®—ã™ã‚‹
+    /// @param vec å†…ç©ã‚’è¨ˆç®—ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«
+    /// @return å†…ç©
     [[nodiscard]] constexpr float Dot(const Vector3 &vec) const noexcept {
         return x * vec.x + y * vec.y + z * vec.z;
     }
 
-    /// @brief ƒxƒNƒgƒ‹‚ÌŠOÏ‚ğŒvZ‚·‚é
-    /// @param vec ŠOÏ‚ğŒvZ‚·‚éƒxƒNƒgƒ‹
-    /// @return ŠOÏ
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã®å¤–ç©ã‚’è¨ˆç®—ã™ã‚‹
+    /// @param vec å¤–ç©ã‚’è¨ˆç®—ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«
+    /// @return å¤–ç©
     [[nodiscard]] constexpr const Vector3 Cross(const Vector3 &vec) const noexcept {
         return Vector3(
             y * vec.z - z * vec.y,
@@ -90,58 +90,46 @@ struct Vector3 {
         );
     }
 
-    /// @brief ƒxƒNƒgƒ‹‚Ì’·‚³‚ğŒvZ‚·‚é
-    /// @return ƒxƒNƒgƒ‹‚Ì’·‚³
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã‚’è¨ˆç®—ã™ã‚‹
+    /// @return ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•
     [[nodiscard]] float Length() const noexcept {
         return std::sqrt(LengthSquared());
     }
 
-    /// @brief ƒxƒNƒgƒ‹‚Ì’·‚³‚Ì“ñæ‚ğŒvZ‚·‚é
-    /// @return ƒxƒNƒgƒ‹‚Ì’·‚³‚Ì“ñæ
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã®äºŒä¹—ã‚’è¨ˆç®—ã™ã‚‹
+    /// @return ãƒ™ã‚¯ãƒˆãƒ«ã®é•·ã•ã®äºŒä¹—
     [[nodiscard]] constexpr float LengthSquared() const noexcept {
         return Dot(*this);
     }
 
-    /// @brief —v‘f‚ª‚·‚×‚Ä0‚Å‚ ‚é‚©‚ğ”»’è‚·‚é
-    /// @return true:‚·‚×‚Ä‚Ì—v‘f‚ª0‚Å‚ ‚é false:‚»‚êˆÈŠO
-    [[nodiscard]] constexpr bool IsZero() const noexcept {
-        return x == 0.0f && y == 0.0f && z == 0.0f;
-    }
-
-    /// @brief —v‘f‚ª‚·‚×‚ÄNaN‚Å‚ ‚é‚©‚ğ”»’è‚·‚é
-    /// @return true:‚·‚×‚Ä‚Ì—v‘f‚ªNaN‚Å‚ ‚é false:‚»‚êˆÈŠO
-    [[nodiscard]] constexpr bool IsNaN() const noexcept {
-        return std::isnan(x) || std::isnan(y) || std::isnan(z);
-    }
-
-    /// @brief ƒxƒNƒgƒ‹‚ğ³‹K‰»‚·‚é
-    /// @return ³‹K‰»‚³‚ê‚½ƒxƒNƒgƒ‹
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã‚’æ­£è¦åŒ–ã™ã‚‹
+    /// @return æ­£è¦åŒ–ã•ã‚ŒãŸãƒ™ã‚¯ãƒˆãƒ«
     [[nodiscard]] inline const Vector3 Normalize() const;
 
-    /// @brief ƒxƒNƒgƒ‹‚ğË‰e‚·‚é
-    /// @param vec Ë‰e‚·‚éƒxƒNƒgƒ‹
-    /// @return Ë‰e‚³‚ê‚½ƒxƒNƒgƒ‹
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã‚’å°„å½±ã™ã‚‹
+    /// @param vec å°„å½±ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«
+    /// @return å°„å½±ã•ã‚ŒãŸãƒ™ã‚¯ãƒˆãƒ«
     [[nodiscard]] inline constexpr const Vector3 Projection(const Vector3 &vec) const noexcept;
     
-    /// @brief ‚ü‚ğ‹‚ß‚é
-    /// @param vec ‚ü‚ğ‹‚ß‚éƒxƒNƒgƒ‹
-    /// @return ‚ü
+    /// @brief å‚ç·šã‚’æ±‚ã‚ã‚‹
+    /// @param vec å‚ç·šã‚’æ±‚ã‚ã‚‹ãƒ™ã‚¯ãƒˆãƒ«
+    /// @return å‚ç·š
     [[nodiscard]] inline constexpr const Vector3 Rejection(const Vector3 &vec) const noexcept;
 
-    /// @brief ƒxƒNƒgƒ‹‚ğ”½Ë‚·‚é
-    /// @param normal –@üƒxƒNƒgƒ‹
-    /// @return ”½Ë‚³‚ê‚½ƒxƒNƒgƒ‹
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã‚’åå°„ã™ã‚‹
+    /// @param normal æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
+    /// @return åå°„ã•ã‚ŒãŸãƒ™ã‚¯ãƒˆãƒ«
     [[nodiscard]] inline constexpr const Vector3 Refrection(const Vector3 &normal) const noexcept;
     
-    /// @brief ƒxƒNƒgƒ‹‚ğ”½Ë‚·‚é
-    /// @param normal –@üƒxƒNƒgƒ‹
-    /// @param eta ‹üÜ—¦
-    /// @return ”½Ë‚³‚ê‚½ƒxƒNƒgƒ‹
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«ã‚’åå°„ã™ã‚‹
+    /// @param normal æ³•ç·šãƒ™ã‚¯ãƒˆãƒ«
+    /// @param eta å±ˆæŠ˜ç‡
+    /// @return åå°„ã•ã‚ŒãŸãƒ™ã‚¯ãƒˆãƒ«
     [[nodiscard]] inline constexpr const Vector3 Refrection(const Vector3 &normal, const float eta) const noexcept;
 
-    /// @brief ƒxƒNƒgƒ‹ŠÔ‚Ì‹——£‚ğŒvZ‚·‚é
-    /// @param vec ‹——£‚ğŒvZ‚·‚éƒxƒNƒgƒ‹
-    /// @return ƒxƒNƒgƒ‹ŠÔ‚Ì‹——£
+    /// @brief ãƒ™ã‚¯ãƒˆãƒ«é–“ã®è·é›¢ã‚’è¨ˆç®—ã™ã‚‹
+    /// @param vec è·é›¢ã‚’è¨ˆç®—ã™ã‚‹ãƒ™ã‚¯ãƒˆãƒ«
+    /// @return ãƒ™ã‚¯ãƒˆãƒ«é–“ã®è·é›¢
     [[nodiscard]] inline float Distance(const Vector3 &vec) const;
 
     float x;
