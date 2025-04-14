@@ -52,14 +52,14 @@ struct Matrix4x4 {
         float m[3][3];
     };
 
-    Matrix4x4 &operator+=(const Matrix4x4 &mat) noexcept;
-    Matrix4x4 &operator-=(const Matrix4x4 &mat) noexcept;
+    Matrix4x4 &operator+=(const Matrix4x4 &matrix) noexcept;
+    Matrix4x4 &operator-=(const Matrix4x4 &matrix) noexcept;
     Matrix4x4 &operator*=(const float scalar) noexcept;
-    Matrix4x4 &operator*=(const Matrix4x4 &mat) noexcept;
-    constexpr const Matrix4x4 operator+(const Matrix4x4 &mat) const noexcept;
-    constexpr const Matrix4x4 operator-(const Matrix4x4 &mat) const noexcept;
+    Matrix4x4 &operator*=(const Matrix4x4 &matrix) noexcept;
+    constexpr const Matrix4x4 operator+(const Matrix4x4 &matrix) const noexcept;
+    constexpr const Matrix4x4 operator-(const Matrix4x4 &matrix) const noexcept;
     constexpr const Matrix4x4 operator*(const float scalar) const noexcept;
-    constexpr const Matrix4x4 operator*(const Matrix4x4 &mat) const noexcept;
+    constexpr const Matrix4x4 operator*(const Matrix4x4 &matrix) const noexcept;
 
     /// @brief 単位行列を取得する
     /// @return 単位行列

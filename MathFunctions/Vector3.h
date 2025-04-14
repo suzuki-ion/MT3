@@ -10,29 +10,29 @@ struct Vector3 {
 
     constexpr Vector3(float x, float y, float z) noexcept : x(x), y(y), z(z) {}
     explicit constexpr Vector3(float v) noexcept : x(v), y(v), z(v) {}
-    Vector3(const Vector3 &vec) : x(vec.x), y(vec.y), z(vec.z) {}
+    Vector3(const Vector3 &vector) : x(vector.x), y(vector.y), z(vector.z) {}
 
     float operator[](const int index) const noexcept;
     float &operator[](const int index) noexcept;
-    Vector3 &operator=(const Vector3 &vec) noexcept;
-    Vector3 &operator+=(const Vector3 &vec) noexcept;
-    Vector3 &operator-=(const Vector3 &vec) noexcept;
+    Vector3 &operator=(const Vector3 &vector) noexcept;
+    Vector3 &operator+=(const Vector3 &vector) noexcept;
+    Vector3 &operator-=(const Vector3 &vector) noexcept;
     Vector3 &operator*=(const float scalar) noexcept;
-    Vector3 &operator*=(const Vector3 &vec) noexcept;
+    Vector3 &operator*=(const Vector3 &vector) noexcept;
     Vector3 &operator/=(const float scalar);
-    Vector3 &operator/=(const Vector3 &vec);
-    bool operator==(const Vector3 &vec) const noexcept;
-    bool operator!=(const Vector3 &vec) const noexcept;
+    Vector3 &operator/=(const Vector3 &vector);
+    bool operator==(const Vector3 &vector) const noexcept;
+    bool operator!=(const Vector3 &vector) const noexcept;
 
     /// @brief ベクトルの内積を計算する
-    /// @param vec 内積を計算するベクトル
+    /// @param vector 内積を計算するベクトル
     /// @return 内積
-    [[nodiscard]] constexpr float Dot(const Vector3 &vec) const noexcept;
+    [[nodiscard]] constexpr float Dot(const Vector3 &vector) const noexcept;
 
     /// @brief ベクトルの外積を計算する
-    /// @param vec 外積を計算するベクトル
+    /// @param vector 外積を計算するベクトル
     /// @return 外積
-    [[nodiscard]] Vector3 Cross(const Vector3 &vec) const noexcept;
+    [[nodiscard]] Vector3 Cross(const Vector3 &vector) const noexcept;
 
     /// @brief ベクトルの長さを計算する
     /// @return ベクトルの長さ
@@ -47,14 +47,14 @@ struct Vector3 {
     [[nodiscard]] inline const Vector3 Normalize() const;
 
     /// @brief ベクトルを射影する
-    /// @param vec 射影するベクトル
+    /// @param vector 射影するベクトル
     /// @return 射影されたベクトル
-    [[nodiscard]] inline constexpr const Vector3 Projection(const Vector3 &vec) const noexcept;
+    [[nodiscard]] inline constexpr const Vector3 Projection(const Vector3 &vector) const noexcept;
     
     /// @brief 垂線を求める
-    /// @param vec 垂線を求めるベクトル
+    /// @param vector 垂線を求めるベクトル
     /// @return 垂線
-    [[nodiscard]] inline constexpr const Vector3 Rejection(const Vector3 &vec) const noexcept;
+    [[nodiscard]] inline constexpr const Vector3 Rejection(const Vector3 &vector) const noexcept;
 
     /// @brief ベクトルを反射する
     /// @param normal 法線ベクトル
@@ -68,9 +68,9 @@ struct Vector3 {
     [[nodiscard]] inline constexpr const Vector3 Refrection(const Vector3 &normal, const float eta) const noexcept;
 
     /// @brief ベクトル間の距離を計算する
-    /// @param vec 距離を計算するベクトル
+    /// @param vector 距離を計算するベクトル
     /// @return ベクトル間の距離
-    [[nodiscard]] inline float Distance(const Vector3 &vec) const;
+    [[nodiscard]] inline float Distance(const Vector3 &vector) const;
 
     /// @brief ベクトルを行列で変換する
     /// @param mat 変換行列
@@ -82,13 +82,13 @@ struct Vector3 {
     float z;
 };
 
-inline constexpr const Vector3 operator-(const Vector3 &vec) noexcept;
-inline constexpr const Vector3 operator+(const Vector3 &vec1, const Vector3 &vec2) noexcept;
-inline constexpr const Vector3 operator-(const Vector3 &vec1, const Vector3 &vec2) noexcept;
-inline constexpr const Vector3 operator*(const Vector3 &vec, const float scalar) noexcept;
-inline constexpr const Vector3 operator*(const float scalar, const Vector3 &vec) noexcept;
-inline constexpr const Vector3 operator*(const Vector3 &vec1, const Vector3 &vec2) noexcept;
-inline constexpr const Vector3 operator/(const Vector3 &vec, const float scalar);
-inline constexpr const Vector3 operator/(const Vector3 &vec1, const Vector3 &vec2);
-inline constexpr const Vector3 operator*(const Matrix4x4 &mat, const Vector3 &vec) noexcept;
-inline constexpr const Vector3 operator*(const Vector3 &vec, const Matrix4x4 &mat) noexcept;
+inline constexpr const Vector3 operator-(const Vector3 &vector) noexcept;
+inline constexpr const Vector3 operator+(const Vector3 &vector1, const Vector3 &vector2) noexcept;
+inline constexpr const Vector3 operator-(const Vector3 &vector1, const Vector3 &vector2) noexcept;
+inline constexpr const Vector3 operator*(const Vector3 &vector, const float scalar) noexcept;
+inline constexpr const Vector3 operator*(const float scalar, const Vector3 &vector) noexcept;
+inline constexpr const Vector3 operator*(const Vector3 &vector1, const Vector3 &vector2) noexcept;
+inline constexpr const Vector3 operator/(const Vector3 &vector, const float scalar);
+inline constexpr const Vector3 operator/(const Vector3 &vector1, const Vector3 &vector2);
+inline constexpr const Vector3 operator*(const Matrix4x4 &mat, const Vector3 &vector) noexcept;
+inline constexpr const Vector3 operator*(const Vector3 &vector, const Matrix4x4 &mat) noexcept;
