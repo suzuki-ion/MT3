@@ -7,10 +7,12 @@ struct AffineMatrix {
     AffineMatrix(const Matrix4x4 &scale, const Matrix4x4 &rotate, const Matrix4x4 &translate) noexcept
         : scaleMatrix(scale), rotateMatrix(rotate), translateMatrix(translate), worldMatrix(scale *rotate *translate)
     {}
-    AffineMatrix(const Vector3 &scale, const Vector3 &rotate, const Vector3 &translate) noexcept
-        : scaleMatrix(Matrix4x4().MakeScale(scale)), rotateMatrix(Matrix4x4().MakeRotate(rotate)), translateMatrix(Matrix4x4().MakeTranslate(translate)),
-        worldMatrix(scaleMatrix * rotateMatrix * translateMatrix)
-    {}
+    AffineMatrix(const Vector3 &scale, const Vector3 &rotate, const Vector3 &translate) noexcept {
+        scaleMatrix.MakeScale(scale);
+        rotateMatrix.MakeRotate(rotate);
+        translateMatrix.MakeTranslate(translate);
+        worldMatrix = scaleMatrix * rotateMatrix * translateMatrix;
+    }
     AffineMatrix(const AffineMatrix &affine) noexcept
         : scaleMatrix(affine.scaleMatrix), rotateMatrix(affine.rotateMatrix), translateMatrix(affine.translateMatrix), worldMatrix(affine.worldMatrix)
     {}
@@ -38,15 +40,15 @@ struct AffineMatrix {
     }
 
     void SetScale(const Vector3 &scale) noexcept {
-        scaleMatrix = Matrix4x4().MakeScale(scale);
+        scaleMatrix.MakeScale(scale);
         worldMatrix = scaleMatrix * rotateMatrix * translateMatrix;
     }
     void SetRotate(const Vector3 &rotate) noexcept {
-        rotateMatrix = Matrix4x4().MakeRotate(rotate);
+        rotateMatrix.MakeRotate(rotate);
         worldMatrix = scaleMatrix * rotateMatrix * translateMatrix;
     }
     void SetTranslate(const Vector3 &translate) noexcept {
-        translateMatrix = Matrix4x4().MakeTranslate(translate);
+        translateMatrix.MakeTranslate(translate);
         worldMatrix = scaleMatrix * rotateMatrix * translateMatrix;
     }
 

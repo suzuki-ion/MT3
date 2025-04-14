@@ -186,7 +186,7 @@ constexpr const float Matrix4x4::Determinant() const noexcept {
     return (m[0][0] * c00) + (m[0][1] * c01) + (m[0][2] * c02) + (m[0][3] * c03);
 }
 
-inline const Matrix4x4 Matrix4x4::Inverse() const {
+Matrix4x4 Matrix4x4::Inverse() const {
     float c00 = Matrix3x3(
         m[1][1], m[1][2], m[1][3],
         m[2][1], m[2][2], m[2][3],
@@ -265,60 +265,132 @@ inline const Matrix4x4 Matrix4x4::Inverse() const {
     );
 }
 
-Matrix4x4 Matrix4x4::MakeTranslate(const Vector3 &translate) noexcept {
-    return Matrix4x4(
-        1.0f, 0.0f, 0.0f, 0.0f,
-        0.0f, 1.0f, 0.0f, 0.0f,
-        0.0f, 0.0f, 1.0f, 0.0f,
-        translate.x, translate.y, translate.z, 1.0f
-    );
+void Matrix4x4::MakeTranslate(const Vector3 &translate) noexcept {
+    m[0][0] = 1.0f;
+    m[0][1] = 0.0f;
+    m[0][2] = 0.0f;
+    m[0][3] = 0.0f;
+    m[1][0] = 0.0f;
+    m[1][1] = 1.0f;
+    m[1][2] = 0.0f;
+    m[1][3] = 0.0f;
+    m[2][0] = 0.0f;
+    m[2][1] = 0.0f;
+    m[2][2] = 1.0f;
+    m[2][3] = 0.0f;
+    m[3][0] = translate.x;
+    m[3][1] = translate.y;
+    m[3][2] = translate.z;
+    m[3][3] = 1.0f;
 }
 
-Matrix4x4 Matrix4x4::MakeScale(const Vector3 &scale) noexcept {
-    return Matrix4x4(
-        scale.x, 0.0f, 0.0f, 0.0f,
-        0.0f, scale.y, 0.0f, 0.0f,
-        0.0f, 0.0f, scale.z, 0.0f,
-        0.0f, 0.0f, 0.0f, 1.0f
-    );
+void Matrix4x4::MakeScale(const Vector3 &scale) noexcept {
+    m[0][0] = scale.x;
+    m[0][1] = 0.0f;
+    m[0][2] = 0.0f;
+    m[0][3] = 0.0f;
+    m[1][0] = 0.0f;
+    m[1][1] = scale.y;
+    m[1][2] = 0.0f;
+    m[1][3] = 0.0f;
+    m[2][0] = 0.0f;
+    m[2][1] = 0.0f;
+    m[2][2] = scale.z;
+    m[2][3] = 0.0f;
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 
-Matrix4x4 Matrix4x4::MakeRotate(const Vector3 &rotate) noexcept {
-    return MakeRotateX(rotate.x) * MakeRotateY(rotate.y) * MakeRotateZ(rotate.z);
+void Matrix4x4::MakeRotate(const Vector3 &rotate) noexcept {
+    Matrix4x4 mX;
+    Matrix4x4 mY;
+    Matrix4x4 mZ;
+    mX.MakeRotateX(rotate.x);
+    mY.MakeRotateY(rotate.y);
+    mZ.MakeRotateZ(rotate.z);
+    *this = mX * mY * mZ;
 }
 
-Matrix4x4 Matrix4x4::MakeRotate(const float radianX, const float radianY, const float radianZ) noexcept {
-    return MakeRotateX(radianX) * MakeRotateY(radianY) * MakeRotateZ(radianZ);
+void Matrix4x4::MakeRotate(const float radianX, const float radianY, const float radianZ) noexcept {
+    Matrix4x4 mX;
+    Matrix4x4 mY;
+    Matrix4x4 mZ;
+    mX.MakeRotateX(radianX);
+    mY.MakeRotateY(radianY);
+    mZ.MakeRotateZ(radianZ);
+    *this = mX * mY * mZ;
 }
 
-Matrix4x4 Matrix4x4::MakeRotateX(const float radian) noexcept {
-    return Matrix4x4(
-        1.0f,   0.0f,               0.0f,               0.0f,
-        0.0f,   std::cos(radian),   std::sin(radian),   0.0f,
-        0.0f,   -std::sin(radian),  std::cos(radian),   0.0f,
-        0.0f,   0.0f,               0.0f,               1.0f
-    );
+void Matrix4x4::MakeRotateX(const float radian) noexcept {
+    m[0][0] = 1.0f;
+    m[0][1] = 0.0f;
+    m[0][2] = 0.0f;
+    m[0][3] = 0.0f;
+    m[1][0] = 0.0f;
+    m[1][1] = std::cos(radian);
+    m[1][2] = std::sin(radian);
+    m[1][3] = 0.0f;
+    m[2][0] = 0.0f;
+    m[2][1] = -std::sin(radian);
+    m[2][2] = std::cos(radian);
+    m[2][3] = 0.0f;
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 
-Matrix4x4 Matrix4x4::MakeRotateY(const float radian) noexcept {
-    return Matrix4x4(
-        std::cos(radian),   0.0f,   -std::sin(radian),  0.0f,
-        0.0f,               1.0f,   0.0f,               0.0f,
-        std::sin(radian),   0.0f,   std::cos(radian),   0.0f,
-        0.0f,               0.0f,   0.0f,               1.0f
-    );
+void Matrix4x4::MakeRotateY(const float radian) noexcept {
+    m[0][0] = std::cos(radian);
+    m[0][1] = 0.0f;
+    m[0][2] = -std::sin(radian);
+    m[0][3] = 0.0f;
+    m[1][0] = 0.0f;
+    m[1][1] = 1.0f;
+    m[1][2] = 0.0f;
+    m[1][3] = 0.0f;
+    m[2][0] = std::sin(radian);
+    m[2][1] = 0.0f;
+    m[2][2] = std::cos(radian);
+    m[2][3] = 0.0f;
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 
-Matrix4x4 Matrix4x4::MakeRotateZ(const float radian) noexcept {
-    return Matrix4x4(
-        std::cos(radian),   std::sin(radian),   0.0f,   0.0f,
-        -std::sin(radian),  std::cos(radian),   0.0f,   0.0f,
-        0.0f,               0.0f,               1.0f,   0.0f,
-        0.0f,               0.0f,               0.0f,   1.0f
-    );
+void Matrix4x4::MakeRotateZ(const float radian) noexcept {
+    m[0][0] = std::cos(radian);
+    m[0][1] = std::sin(radian);
+    m[0][2] = 0.0f;
+    m[0][3] = 0.0f;
+    m[1][0] = -std::sin(radian);
+    m[1][1] = std::cos(radian);
+    m[1][2] = 0.0f;
+    m[1][3] = 0.0f;
+    m[2][0] = 0.0f;
+    m[2][1] = 0.0f;
+    m[2][2] = 1.0f;
+    m[2][3] = 0.0f;
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 
-Matrix4x4 Matrix4x4::MakeAffine(const Vector3 &scale, const Vector3 &rotate, const Vector3 &translate) noexcept {
-    return MakeScale(scale) * MakeRotate(rotate) * MakeTranslate(translate);
+void Matrix4x4::MakeAffine(const Vector3 &scale, const Vector3 &rotate, const Vector3 &translate) noexcept {
+    Matrix4x4 mX;
+    Matrix4x4 mY;
+    Matrix4x4 mZ;
+    Matrix4x4 mT;
+    Matrix4x4 mS;
+    mX.MakeRotateX(rotate.x);
+    mY.MakeRotateY(rotate.y);
+    mZ.MakeRotateZ(rotate.z);
+    mT.MakeTranslate(translate);
+    mS.MakeScale(scale);
+    *this =  mS * (mX * mY * mZ) * mT;
 }
 

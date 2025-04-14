@@ -32,7 +32,7 @@ struct Vector3 {
     /// @brief ベクトルの外積を計算する
     /// @param vec 外積を計算するベクトル
     /// @return 外積
-    [[nodiscard]] constexpr const Vector3 Cross(const Vector3 &vec) const noexcept;
+    [[nodiscard]] Vector3 Cross(const Vector3 &vec) const noexcept;
 
     /// @brief ベクトルの長さを計算する
     /// @return ベクトルの長さ

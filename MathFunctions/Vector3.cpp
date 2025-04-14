@@ -10,7 +10,7 @@ float &Vector3::operator[](const int index) noexcept {
     return (&x)[index];
 }
 
-inline Vector3 &Vector3::operator=(const Vector3 &vec) noexcept {
+Vector3 &Vector3::operator=(const Vector3 &vec) noexcept {
     x = vec.x;
     y = vec.y;
     z = vec.z;
@@ -103,7 +103,7 @@ constexpr float Vector3::Dot(const Vector3 &vec) const noexcept {
     return x * vec.x + y * vec.y + z * vec.z;
 }
 
-constexpr const Vector3 Vector3::Cross(const Vector3 &vec) const noexcept {
+Vector3 Vector3::Cross(const Vector3 &vec) const noexcept {
     return Vector3(
         y * vec.z - z * vec.y,
         z * vec.x - x * vec.z,

@@ -75,29 +75,29 @@ struct Matrix4x4 {
 
     /// @brief 逆行列を計算する
     /// @return 逆行列
-    [[nodiscard]] inline const Matrix4x4 Inverse() const;
+    [[nodiscard]] Matrix4x4 Inverse() const;
 
     /// @brief 平行移動行列を生成する
     /// @param translate 平行移動ベクトル
     /// @return 平行移動行列
-    [[nodiscard]] Matrix4x4 MakeTranslate(const Vector3 &translate) noexcept;
+    void MakeTranslate(const Vector3 &translate) noexcept;
 
     /// @brief 拡大縮小行列を生成する
     /// @param scale 拡大縮小ベクトル
     /// @return 拡大縮小行列
-    [[nodiscard]] Matrix4x4 MakeScale(const Vector3 &scale) noexcept;
+    void MakeScale(const Vector3 &scale) noexcept;
 
     /// @brief 回転行列を生成する
     /// @param rotate 回転角度
     /// @return 回転行列
-    [[nodiscard]] Matrix4x4 MakeRotate(const Vector3 &rotate) noexcept;
+    void MakeRotate(const Vector3 &rotate) noexcept;
 
     /// @brief 回転行列を生成する
     /// @param radianX 回転角度 X
     /// @param radianY 回転角度 Y
     /// @param radianZ 回転角度 Z
     /// @return 回転行列
-    [[nodiscard]] Matrix4x4 MakeRotate(
+    void MakeRotate(
         const float radianX,
         const float radianY,
         const float radianZ) noexcept;
@@ -105,24 +105,23 @@ struct Matrix4x4 {
     /// @brief X軸回転行列を生成する
     /// @param radian 回転角度
     /// @return X軸回転行列
-    [[nodiscard]] Matrix4x4 MakeRotateX(const float radian) noexcept;
+    void MakeRotateX(const float radian) noexcept;
 
     /// @brief Y軸回転行列を生成する
     /// @param radian 回転角度
     /// @return Y軸回転行列
-    [[nodiscard]] Matrix4x4 MakeRotateY(const float radian) noexcept;
+    void MakeRotateY(const float radian) noexcept;
 
     /// @brief Z軸回転行列を生成する
     /// @param radian 回転角度
     /// @return Z軸回転行列
-    [[nodiscard]] Matrix4x4 MakeRotateZ(const float radian) noexcept;
+    void MakeRotateZ(const float radian) noexcept;
 
     /// @brief アフィン行列を生成する
     /// @param scale 拡大縮小ベクトル
     /// @param rotate 回転角度
     /// @param translate 平行移動ベクトル
-    /// @return アフィン行列
-    [[nodiscard]] Matrix4x4 MakeAffine(
+    void MakeAffine(
         const Vector3 &scale,
         const Vector3 &rotate,
         const Vector3 &translate) noexcept;
