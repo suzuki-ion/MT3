@@ -32,6 +32,12 @@
     <ClCompile Include="MathFunctions\RenderingPipeline.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="MathFunctions\DrawGrid.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="MathFunctions\Sphere.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
@@ -43,5 +49,7 @@
     <ClInclude Include="MathFunctions\ScreenPrintf.h" />
     <ClInclude Include="MathFunctions\Camera.h" />
     <ClInclude Include="MathFunctions\RenderingPipeline.h" />
+    <ClInclude Include="MathFunctions\DrawGrid.h" />
+    <ClInclude Include="MathFunctions\Sphere.h" />
   </ItemGroup>
 </Project>

@@ -1,9 +1,12 @@
 #include <Novice.h>
+#include <imgui.h>
 #include "MathFunctions/Vector3.h"
 #include "MathFunctions/Matrix4x4.h"
 #include "MathFunctions/AffineMatrix.h"
 #include "MathFunctions/RenderingPipeline.h"
 #include "MathFunctions/ScreenPrintf.h"
+#include "MathFunctions/DrawGrid.h"
+#include "MathFunctions/Sphere.h"
 
 float kWinWidth = 1280.0f;
 float kWinHeight = 720.0f;
@@ -21,28 +24,21 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//--------- 変数 ---------//
 
-	// クロス積の確認用
-	Vector3 v1(1.2f, -3.9f, 2.5f);
-    Vector3 v2(2.8f, 0.4f, -1.3f);
-
-	const Vector3 kLocalVertices[3] = {
-        Vector3(0.0f, 64.0f, 0.0f),
-		Vector3(64.0f, -64.0f, 0.0f),
-		Vector3(-64.0f, -64.0f, 0.0f)
-	};
-    Vector3 rotate = { 0.0f, 0.0f, 0.0f };
-    Vector3 translate = { 0.0f, 0.0f, 256.0f };
-    Vector3 cameraPosition = { 0.0f, 0.0f, 0.0f };
+    AffineMatrix cameraMatrix;
+    Vector3 cameraTranslate = { 0.0f, 16.0f, -128.0f };
+    Vector3 cameraRotate = { 0.0f, 0.0f, 0.0f };
+    cameraMatrix.SetTranslate(cameraTranslate);
+    cameraMatrix.SetRotate(cameraRotate);
+    cameraMatrix.SetScale({ 1.0f, 1.0f, 1.0f });
+	
+	Sphere sphere({ 0.0f, 0.0f, 0.0f }, 8.0f);
 
     Matrix4x4 worldMatrix;
-    Matrix4x4 cameraMatrix;
 	Matrix4x4 viewMatrix;
     Matrix4x4 projectionMatrix;
     Matrix4x4 wvpMatrix;
     Matrix4x4 viewportMatrix;
-    Vector3 screenVertices[3];
-    Vector3 ndcVertex;
-
+    
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -55,34 +51,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
-
-		// WSキーで前後、ADキーで左右に移動
-        if (keys[DIK_W]) {
-            translate.z += 2.0f;
-        }
-        if (keys[DIK_S]) {
-            translate.z -= 2.0f;
-        }
-        if (keys[DIK_A]) {
-            translate.x -= 2.0f;
-        }
-        if (keys[DIK_D]) {
-            translate.x += 2.0f;
-        }
-
-        rotate.y += 0.1f;
+		
+        ImGui::Begin("window");
+        ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.1f);
+        ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.1f);
+        ImGui::DragFloat3("SphereCenter", &sphere.center.x, 0.1f);
+        ImGui::DragFloat("SphereRadius", &sphere.radius, 0.1f);
+        ImGui::End();
 
         // 各種行列の計算
-		worldMatrix.MakeAffine({1.0f, 1.0f, 1.0f}, rotate, translate);
-        cameraMatrix.MakeAffine({ 1.0f, 1.0f, 1.0f }, { 0.0f, 0.0f, 0.0f }, cameraPosition);
-        viewMatrix = cameraMatrix.Inverse();
+		cameraMatrix.SetTranslate(cameraTranslate);
+        cameraMatrix.SetRotate(cameraRotate);
+		worldMatrix.MakeAffine({1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
+        viewMatrix = cameraMatrix.InverseScale() * cameraMatrix.InverseRotate() * cameraMatrix.InverseTranslate();
         projectionMatrix = MakePerspectiveFovMatrix(0.45f, kWinWidth / kWinHeight, 0.1f, 100.0f);
         wvpMatrix = worldMatrix * (viewMatrix * projectionMatrix);
         viewportMatrix = MakeViewportMatrix(0.0f, 0.0f, kWinWidth, kWinHeight, 0.0f, 1.0f);
-		for (int i = 0; i < 3; i++) {
-            ndcVertex = kLocalVertices[i].Transform(wvpMatrix);
-            screenVertices[i] = ndcVertex.Transform(viewportMatrix);
-		}
 
 		///
 		/// ↑更新処理ここまで
@@ -92,18 +76,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-        VectorScreenPrintf(0, 0, v1.Cross(v2), "Cross");
-
-        Novice::DrawTriangle(
-            static_cast<int>(screenVertices[0].x),
-            static_cast<int>(screenVertices[0].y),
-            static_cast<int>(screenVertices[1].x),
-            static_cast<int>(screenVertices[1].y),
-            static_cast<int>(screenVertices[2].x),
-            static_cast<int>(screenVertices[2].y),
-            RED,
-			kFillModeSolid
-        );
+        VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(cameraMatrix.translateMatrix), "Camera Position");
+        DrawGrid(wvpMatrix, viewportMatrix, 32.0f, 16);
+        sphere.Draw(wvpMatrix, viewportMatrix, 16, BLACK);
 
 		///
 		/// ↑描画処理ここまで
