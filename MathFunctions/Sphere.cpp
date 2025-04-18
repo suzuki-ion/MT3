@@ -3,6 +3,13 @@
 #include <Novice.h>
 #define M_PI (4.0f * std::atanf(1.0f))
 
+bool Sphere::IsCollision(const Sphere &sphere) const {
+    // 2つの球の中心間の距離を求める
+    const float distance = (center - sphere.center).Length();
+    // 2つの球の半径の合計よりもc-fの長さが短ければ衝突
+    return distance < (radius + sphere.radius);
+}
+
 void Sphere::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int kSubdivision, const unsigned int color) {
     const float kLonEvery = M_PI * 2.0f / static_cast<float>(kSubdivision);
     const float kLatEvery = M_PI / static_cast<float>(kSubdivision);

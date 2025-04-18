@@ -32,16 +32,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     cameraMatrix.SetRotate(cameraRotate);
     cameraMatrix.SetScale({ 1.0f, 1.0f, 1.0f });
 
-    Segment segment{
-        { -2.0f, -1.0f, 0.0f },
-        { 3.0f, 2.0f, 2.0f }
-    };
-    Vector3 point = { -1.5f, 0.6f, 0.6f };
-    Vector3 projection = (point - segment.origin).Projection(segment.diff);
-    Vector3 closestPoint = point.ClosestPoint(segment);
-    Sphere pointSphere{ point, 0.01f };
-    Sphere closestPointSphere{ point.ClosestPoint(segment), 0.01f };
-	
+	Sphere sphere1({ 0.0f, 0.0f, 0.0f }, 0.8f);
+	Sphere sphere2({ 1.0f, 0.0f, 1.0f }, 0.4f);
+
     Matrix4x4 worldMatrix;
 	Matrix4x4 viewMatrix;
     Matrix4x4 projectionMatrix;
@@ -64,17 +57,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         ImGui::Begin("window");
         ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.1f);
         ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.1f);
-        ImGui::DragFloat3("Point", &point.x, 0.1f);
-        ImGui::DragFloat3("SegmentOrigin", &segment.origin.x, 0.1f);
-        ImGui::DragFloat3("SegmentDiff", &segment.diff.x, 0.1f);
-        ImGui::InputFloat3("Projection", &projection.x, "%f.3f", ImGuiInputTextFlags_ReadOnly);
+        ImGui::DragFloat3("Sphere1.Center", &sphere1.center.x, 0.1f);
+        ImGui::DragFloat("Sphere1.Radius", &sphere1.radius, 0.1f);
+        ImGui::DragFloat3("Sphere2.Center", &sphere2.center.x, 0.1f);
+        ImGui::DragFloat("Sphere2.Radius", &sphere2.radius, 0.1f);
         ImGui::End();
-
-        // 正射影ベクトルと最近接点を求める
-        projection = (point - segment.origin).Projection(segment.diff);
-        closestPoint = point.ClosestPoint(segment);
-        pointSphere.SetCenter(point);
-        closestPointSphere.SetCenter(closestPoint);
 
         // 各種行列の計算
 		cameraMatrix.SetTranslate(cameraTranslate);
@@ -95,9 +82,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(cameraMatrix.translateMatrix), "Camera Position");
         DrawGrid(wvpMatrix, viewportMatrix, 2.0f, 16);
-        pointSphere.Draw(wvpMatrix, viewportMatrix, 16, RED);
-        closestPointSphere.Draw(wvpMatrix, viewportMatrix, 16, BLACK);
-        segment.Draw(wvpMatrix, viewportMatrix, WHITE);
+        if (sphere1.IsCollision(sphere2)) {
+            sphere1.Draw(wvpMatrix, viewportMatrix, 16, RED);
+        } else {
+            sphere1.Draw(wvpMatrix, viewportMatrix, 16, WHITE);
+        }
+        sphere2.Draw(wvpMatrix, viewportMatrix, 16, WHITE);
 
 		///
 		/// ↑描画処理ここまで

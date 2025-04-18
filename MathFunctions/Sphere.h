@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Vector3.h"
 #include "Matrix4x4.h"
 
@@ -10,6 +10,11 @@ struct Sphere {
     Sphere(const Sphere &sphere) :
         center(sphere.center), radius(sphere.radius)
     {}
+
+    /// @brief 弾との衝突判定
+    /// @param sphere 衝突判定を行う球
+    /// @return 衝突しているかどうか
+    bool IsCollision(const Sphere &sphere) const;
 
     void SetCenter(const Vector3 &setCenter) {
         center = setCenter;
