@@ -8,6 +8,7 @@
 #include "MathFunctions/DrawGrid.h"
 #include "MathFunctions/Sphere.h"
 #include "MathFunctions/Lines.h"
+#include "MathFunctions/Plane.h"
 
 float kWinWidth = 1280.0f;
 float kWinHeight = 720.0f;
@@ -32,8 +33,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     cameraMatrix.SetRotate(cameraRotate);
     cameraMatrix.SetScale({ 1.0f, 1.0f, 1.0f });
 
-	Sphere sphere1({ 0.0f, 0.0f, 0.0f }, 0.8f);
-	Sphere sphere2({ 1.0f, 0.0f, 1.0f }, 0.4f);
+    Sphere sphere{
+        { 1.2f, 0.0f, 0.0f },
+        0.6f
+    };
+    Plane plane{
+        { 0.0f, 1.0f, 0.0f },
+        1.0f
+    };
 
     Matrix4x4 worldMatrix;
 	Matrix4x4 viewMatrix;
@@ -57,10 +64,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         ImGui::Begin("window");
         ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.1f);
         ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.1f);
-        ImGui::DragFloat3("Sphere1.Center", &sphere1.center.x, 0.1f);
-        ImGui::DragFloat("Sphere1.Radius", &sphere1.radius, 0.1f);
-        ImGui::DragFloat3("Sphere2.Center", &sphere2.center.x, 0.1f);
-        ImGui::DragFloat("Sphere2.Radius", &sphere2.radius, 0.1f);
+        ImGui::DragFloat3("Sphere.Center", &sphere.center.x, 0.1f);
+        ImGui::DragFloat("Sphere.Radius", &sphere.radius, 0.1f);
+        ImGui::DragFloat3("Plane.Normal", &plane.normal.x, 0.1f);
+        ImGui::DragFloat("Plane.Distance", &plane.distance, 0.1f);
         ImGui::End();
 
         // 各種行列の計算
@@ -82,12 +89,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(cameraMatrix.translateMatrix), "Camera Position");
         DrawGrid(wvpMatrix, viewportMatrix, 2.0f, 16);
-        if (sphere1.IsCollision(sphere2)) {
-            sphere1.Draw(wvpMatrix, viewportMatrix, 16, RED);
+        if (sphere.IsCollision(plane)) {
+            sphere.Draw(wvpMatrix, viewportMatrix, 16, RED);
         } else {
-            sphere1.Draw(wvpMatrix, viewportMatrix, 16, WHITE);
+            sphere.Draw(wvpMatrix, viewportMatrix, 16, WHITE);
         }
-        sphere2.Draw(wvpMatrix, viewportMatrix, 16, WHITE);
+        plane.Draw(wvpMatrix, viewportMatrix, WHITE);
 
 		///
 		/// ↑描画処理ここまで

@@ -1,4 +1,5 @@
 ﻿#include "Sphere.h"
+#include "Plane.h"
 #include <cmath>
 #include <Novice.h>
 #define M_PI (4.0f * std::atanf(1.0f))
@@ -8,6 +9,13 @@ bool Sphere::IsCollision(const Sphere &sphere) const {
     const float distance = (center - sphere.center).Length();
     // 2つの球の半径の合計よりもc-fの長さが短ければ衝突
     return distance < (radius + sphere.radius);
+}
+
+bool Sphere::IsCollision(const Plane &plane) const {
+    // 球の中心から平面までの距離kを求める
+    const float k = plane.normal.Dot(center) - plane.distance;
+    // 球の半径と平面までの距離を比較する
+    return std::abs(k) <= radius;
 }
 
 void Sphere::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int kSubdivision, const unsigned int color) {

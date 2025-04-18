@@ -45,7 +45,7 @@ struct Vector3 {
 
     /// @brief ベクトルを正規化する
     /// @return 正規化されたベクトル
-    [[nodiscard]] inline const Vector3 Normalize() const;
+    [[nodiscard]] Vector3 Normalize() const;
 
     /// @brief 正射影ベクトルを求める
     /// @param vector 射影するベクトル
@@ -56,6 +56,10 @@ struct Vector3 {
     /// @param segment 最近接点を求めるセグメント
     /// @return 最近接点
     [[nodiscard]] Vector3 ClosestPoint(const Segment &segment) const noexcept;
+
+    /// @brief 垂直ベクトルを求める
+    /// @return 垂直ベクトル
+    [[nodiscard]] Vector3 Perpendicular() const noexcept;
 
     /// @brief 垂線を求める
     /// @param vector 垂線を求めるベクトル

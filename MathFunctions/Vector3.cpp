@@ -88,7 +88,7 @@ constexpr float Vector3::LengthSquared() const noexcept {
     return Dot(*this);
 }
 
-inline const Vector3 Vector3::Normalize() const {
+Vector3 Vector3::Normalize() const {
     const float length = Length();
     if (length == 0.0f) {
         throw std::runtime_error("Vector3::Normalize() : Division by zero");
@@ -102,6 +102,13 @@ Vector3 Vector3::Projection(const Vector3 &vector) const noexcept {
 
 Vector3 Vector3::ClosestPoint(const Segment &segment) const noexcept {
     return segment.origin + (*this - segment.origin).Projection(segment.diff);
+}
+
+Vector3 Vector3::Perpendicular() const noexcept {
+    if (x != 0.0f || y != 0.0f) {
+        return Vector3(-y, x, 0.0f);
+    }
+    return Vector3(0.0f, -z, y);
 }
 
 inline constexpr const Vector3 Vector3::Rejection(const Vector3 &vector) const noexcept {
