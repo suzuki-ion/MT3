@@ -1,5 +1,6 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
+#include "Lines.h"
 #include <cassert>
 
 float Vector3::operator[](const int index) const noexcept {
@@ -59,38 +60,6 @@ Vector3 &Vector3::operator/=(const Vector3 &vector) {
     return *this;
 }
 
-inline constexpr const Vector3 operator-(const Vector3 &vector) noexcept {
-    return Vector3(-vector.x, -vector.y, -vector.z);
-}
-
-inline constexpr const Vector3 operator+(const Vector3 &vector1, const Vector3 &vector2) noexcept {
-    return Vector3(vector1.x + vector2.x, vector1.y + vector2.y, vector1.z + vector2.z);
-}
-
-inline constexpr const Vector3 operator-(const Vector3 &vector1, const Vector3 &vector2) noexcept {
-    return Vector3(vector1.x - vector2.x, vector1.y - vector2.y, vector1.z - vector2.z);
-}
-
-inline constexpr const Vector3 operator*(const Vector3 &vector, const float scalar) noexcept {
-    return Vector3(vector.x * scalar, vector.y * scalar, vector.z * scalar);
-}
-
-inline constexpr const Vector3 operator*(const float scalar, const Vector3 &vector) noexcept {
-    return Vector3(vector.x * scalar, vector.y * scalar, vector.z * scalar);
-}
-
-inline constexpr const Vector3 operator*(const Vector3 &vector1, const Vector3 &vector2) noexcept {
-    return Vector3(vector1.x * vector2.x, vector1.y * vector2.y, vector1.z * vector2.z);
-}
-
-inline constexpr const Vector3 operator/(const Vector3 &vector, const float scalar) {
-    return vector * (1.0f / scalar);
-}
-
-inline constexpr const Vector3 operator/(const Vector3 &vector1, const Vector3 &vector2) {
-    return Vector3(vector1.x / vector2.x, vector1.y / vector2.y, vector1.z / vector2.z);
-}
-
 bool Vector3::operator==(const Vector3 &vector) const noexcept {
     return x == vector.x && y == vector.y && z == vector.z;
 }
@@ -127,8 +96,12 @@ inline const Vector3 Vector3::Normalize() const {
     return *this / length;
 }
 
-inline constexpr const Vector3 Vector3::Projection(const Vector3 &vector) const noexcept {
-    return vector * (Dot(vector) / vector.Dot(vector)) * vector;
+Vector3 Vector3::Projection(const Vector3 &vector) const noexcept {
+    return (Dot(vector) / vector.Dot(vector)) * vector;
+}
+
+Vector3 Vector3::ClosestPoint(const Segment &segment) const noexcept {
+    return segment.origin + (*this - segment.origin).Projection(segment.diff);
 }
 
 inline constexpr const Vector3 Vector3::Rejection(const Vector3 &vector) const noexcept {

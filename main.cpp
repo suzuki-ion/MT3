@@ -7,6 +7,7 @@
 #include "MathFunctions/ScreenPrintf.h"
 #include "MathFunctions/DrawGrid.h"
 #include "MathFunctions/Sphere.h"
+#include "MathFunctions/Lines.h"
 
 float kWinWidth = 1280.0f;
 float kWinHeight = 720.0f;
@@ -25,14 +26,22 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//--------- 変数 ---------//
 
     AffineMatrix cameraMatrix;
-    Vector3 cameraTranslate = { 0.0f, 16.0f, -128.0f };
-    Vector3 cameraRotate = { 0.0f, 0.0f, 0.0f };
+    Vector3 cameraTranslate = { 0.0f, 0.0f, -8.0f };
+    Vector3 cameraRotate = { 0.3f, 0.0f, 0.0f };
     cameraMatrix.SetTranslate(cameraTranslate);
     cameraMatrix.SetRotate(cameraRotate);
     cameraMatrix.SetScale({ 1.0f, 1.0f, 1.0f });
-	
-	Sphere sphere({ 0.0f, 0.0f, 0.0f }, 8.0f);
 
+    Segment segment{
+        { -2.0f, -1.0f, 0.0f },
+        { 3.0f, 2.0f, 2.0f }
+    };
+    Vector3 point = { -1.5f, 0.6f, 0.6f };
+    Vector3 projection = (point - segment.origin).Projection(segment.diff);
+    Vector3 closestPoint = point.ClosestPoint(segment);
+    Sphere pointSphere{ point, 0.01f };
+    Sphere closestPointSphere{ point.ClosestPoint(segment), 0.01f };
+	
     Matrix4x4 worldMatrix;
 	Matrix4x4 viewMatrix;
     Matrix4x4 projectionMatrix;
@@ -55,9 +64,17 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         ImGui::Begin("window");
         ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.1f);
         ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.1f);
-        ImGui::DragFloat3("SphereCenter", &sphere.center.x, 0.1f);
-        ImGui::DragFloat("SphereRadius", &sphere.radius, 0.1f);
+        ImGui::DragFloat3("Point", &point.x, 0.1f);
+        ImGui::DragFloat3("SegmentOrigin", &segment.origin.x, 0.1f);
+        ImGui::DragFloat3("SegmentDiff", &segment.diff.x, 0.1f);
+        ImGui::InputFloat3("Projection", &projection.x, "%f.3f", ImGuiInputTextFlags_ReadOnly);
         ImGui::End();
+
+        // 正射影ベクトルと最近接点を求める
+        projection = (point - segment.origin).Projection(segment.diff);
+        closestPoint = point.ClosestPoint(segment);
+        pointSphere.SetCenter(point);
+        closestPointSphere.SetCenter(closestPoint);
 
         // 各種行列の計算
 		cameraMatrix.SetTranslate(cameraTranslate);
@@ -77,8 +94,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 
         VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(cameraMatrix.translateMatrix), "Camera Position");
-        DrawGrid(wvpMatrix, viewportMatrix, 32.0f, 16);
-        sphere.Draw(wvpMatrix, viewportMatrix, 16, BLACK);
+        DrawGrid(wvpMatrix, viewportMatrix, 2.0f, 16);
+        pointSphere.Draw(wvpMatrix, viewportMatrix, 16, RED);
+        closestPointSphere.Draw(wvpMatrix, viewportMatrix, 16, BLACK);
+        segment.Draw(wvpMatrix, viewportMatrix, WHITE);
 
 		///
 		/// ↑描画処理ここまで
