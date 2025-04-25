@@ -3,6 +3,9 @@
 #include "Matrix4x4.h"
 
 struct Sphere;
+struct Line;
+struct Ray;
+struct Segment;
 
 struct Plane {
     Plane() : normal{ 0.0f, 0.0f, 0.0f }, distance(0.0f) {}
@@ -35,6 +38,21 @@ struct Plane {
     /// @param sphere 衝突判定を行う球
     /// @return 衝突しているかどうか
     bool IsCollision(const Sphere &sphere) const;
+
+    /// @brief 平面と線分の衝突判定
+    /// @param line 衝突判定を行う線分
+    /// @return 衝突しているかどうか
+    bool IsCollision(const Line &line) const;
+
+    /// @brief 平面と線分の衝突判定
+    /// @param ray 衝突判定を行う線分
+    /// @return 衝突しているかどうか
+    bool IsCollision(const Ray &ray) const;
+
+    /// @brief 平面と線分の衝突判定
+    /// @param segment 衝突判定を行う線分
+    /// @return 衝突しているかどうか
+    bool IsCollision(const Segment &segment) const;
 
     /// @brief 平面を描画する
     /// @param viewProjectionMatrix ビュー投影行列

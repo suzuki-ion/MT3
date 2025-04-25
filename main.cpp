@@ -3,15 +3,15 @@
 #include "MathFunctions/Vector3.h"
 #include "MathFunctions/Matrix4x4.h"
 #include "MathFunctions/AffineMatrix.h"
-#include "MathFunctions/RenderingPipeline.h"
 #include "MathFunctions/ScreenPrintf.h"
 #include "MathFunctions/DrawGrid.h"
 #include "MathFunctions/Sphere.h"
 #include "MathFunctions/Lines.h"
 #include "MathFunctions/Plane.h"
+#include "MathFunctions/Camera.h"
 
-float kWinWidth = 1280.0f;
-float kWinHeight = 720.0f;
+extern const float kWinWidth = 1280.0f;
+extern const float kWinHeight = 720.0f;
 const char kWindowTitle[] = "LE2A_12_スズキ_イオン_MT3";
 
 // Windowsアプリでのエントリーポイント(main関数)
@@ -26,27 +26,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//--------- 変数 ---------//
 
-    AffineMatrix cameraMatrix;
     Vector3 cameraTranslate = { 0.0f, 0.0f, -8.0f };
     Vector3 cameraRotate = { 0.3f, 0.0f, 0.0f };
-    cameraMatrix.SetTranslate(cameraTranslate);
-    cameraMatrix.SetRotate(cameraRotate);
-    cameraMatrix.SetScale({ 1.0f, 1.0f, 1.0f });
+    Camera camera(cameraTranslate, cameraRotate, { 1.0f, 1.0f, 1.0f });
 
-    Sphere sphere{
-        { 1.2f, 0.0f, 0.0f },
-        0.6f
+	Plane plane{
+		{ 0.0f, 1.0f, 0.0f },
+		1.0f
+	};
+    Segment segment{
+        { -0.45f, 0.41f, 0.0f },
+        { 1.0f, 0.58f, 0.0f }
     };
-    Plane plane{
-        { 0.0f, 1.0f, 0.0f },
-        1.0f
-    };
-
-    Matrix4x4 worldMatrix;
-	Matrix4x4 viewMatrix;
-    Matrix4x4 projectionMatrix;
-    Matrix4x4 wvpMatrix;
-    Matrix4x4 viewportMatrix;
     
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -64,20 +55,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         ImGui::Begin("window");
         ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.1f);
         ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.1f);
-        ImGui::DragFloat3("Sphere.Center", &sphere.center.x, 0.1f);
-        ImGui::DragFloat("Sphere.Radius", &sphere.radius, 0.1f);
-        ImGui::DragFloat3("Plane.Normal", &plane.normal.x, 0.1f);
-        ImGui::DragFloat("Plane.Distance", &plane.distance, 0.1f);
+		ImGui::DragFloat3("Plane.Normal", &plane.normal.x, 0.1f);
+		ImGui::DragFloat("Plane.Distance", &plane.distance, 0.1f);
+        ImGui::DragFloat3("Segment.Origin", &segment.origin.x, 0.1f);
+        ImGui::DragFloat3("Segment.Diff", &segment.diff.x, 0.1f);
         ImGui::End();
 
         // 各種行列の計算
-		cameraMatrix.SetTranslate(cameraTranslate);
-        cameraMatrix.SetRotate(cameraRotate);
-		worldMatrix.MakeAffine({1.0f, 1.0f, 1.0f}, {0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f});
-        viewMatrix = cameraMatrix.InverseScale() * cameraMatrix.InverseRotate() * cameraMatrix.InverseTranslate();
-        projectionMatrix = MakePerspectiveFovMatrix(0.45f, kWinWidth / kWinHeight, 0.1f, 100.0f);
-        wvpMatrix = worldMatrix * (viewMatrix * projectionMatrix);
-        viewportMatrix = MakeViewportMatrix(0.0f, 0.0f, kWinWidth, kWinHeight, 0.0f, 1.0f);
+        camera.SetTranslate(cameraTranslate);
+        camera.SetRotate(cameraRotate);
+        camera.CalculateMatrix();
 
 		///
 		/// ↑更新処理ここまで
@@ -87,14 +74,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-        VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(cameraMatrix.translateMatrix), "Camera Position");
-        DrawGrid(wvpMatrix, viewportMatrix, 2.0f, 16);
-        if (sphere.IsCollision(plane)) {
-            sphere.Draw(wvpMatrix, viewportMatrix, 16, RED);
+        VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(camera.GetCameraMatrix().translateMatrix), "Camera Position");
+        DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
+        
+        if (segment.IsCollision(plane)) {
+            segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), RED);
         } else {
-            sphere.Draw(wvpMatrix, viewportMatrix, 16, WHITE);
+            segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
         }
-        plane.Draw(wvpMatrix, viewportMatrix, WHITE);
+        plane.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
 
 		///
 		/// ↑描画処理ここまで

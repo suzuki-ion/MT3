@@ -91,7 +91,7 @@ constexpr float Vector3::LengthSquared() const noexcept {
 Vector3 Vector3::Normalize() const {
     const float length = Length();
     if (length == 0.0f) {
-        throw std::runtime_error("Vector3::Normalize() : Division by zero");
+        return Vector3(0.0f, 0.0f, 0.0f);
     }
     return *this / length;
 }
@@ -139,7 +139,9 @@ Vector3 Vector3::Transform(const Matrix4x4 &mat) const noexcept {
     result.z = x * mat.m[0][2] + y * mat.m[1][2] + z * mat.m[2][2] + 1.0f * mat.m[3][2];
     float w = x * mat.m[0][3] + y * mat.m[1][3] + z * mat.m[2][3] + 1.0f * mat.m[3][3];
 
-    assert(w != 0.0f);
+    if (w == 0.0f) {
+        return Vector3(0.0f);
+    }
 
     result.x /= w;
     result.y /= w;

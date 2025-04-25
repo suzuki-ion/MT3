@@ -110,6 +110,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathFunctions\Camera.cpp" />
     <ClCompile Include="MathFunctions\DrawGrid.cpp" />
     <ClCompile Include="MathFunctions\Lines.cpp" />
     <ClCompile Include="MathFunctions\Matrix4x4.cpp" />
