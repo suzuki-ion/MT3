@@ -1,6 +1,4 @@
 ﻿#pragma once
-#include <stdexcept>
-#include <cmath>
 
 struct Matrix4x4;
 struct Segment;

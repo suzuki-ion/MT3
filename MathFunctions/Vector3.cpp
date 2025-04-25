@@ -1,7 +1,7 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include "Lines.h"
-#include <cassert>
+#include <cmath>
 
 float Vector3::operator[](const int index) const noexcept {
     return (&x)[index];

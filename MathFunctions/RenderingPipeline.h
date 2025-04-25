@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include "Vector3.h"
 #include "Matrix4x4.h"
-#include "AffineMatrix.h"
 
 /// @brief 透視投影行列を生成する
 /// @param fovY 画角 Y

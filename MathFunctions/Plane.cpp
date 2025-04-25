@@ -2,6 +2,7 @@
 #include "Sphere.h"
 #include "Lines.h"
 #include <Novice.h>
+#include <cmath>
 
 void Plane::Set(const Vector3 &n, const Vector3 &p) noexcept {
     this->normal = n;

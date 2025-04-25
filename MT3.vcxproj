@@ -110,6 +110,8 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
   <ItemGroup>
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MathFunctions\AABB.cpp" />
+    <ClCompile Include="MathFunctions\AffineMatrix.cpp" />
     <ClCompile Include="MathFunctions\Camera.cpp" />
     <ClCompile Include="MathFunctions\DrawGrid.cpp" />
     <ClCompile Include="MathFunctions\Lines.cpp" />
@@ -123,6 +125,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
+    <ClInclude Include="MathFunctions\AABB.h" />
     <ClInclude Include="MathFunctions\AffineMatrix.h" />
     <ClInclude Include="MathFunctions\Camera.h" />
     <ClInclude Include="MathFunctions\DrawGrid.h" />

@@ -1,4 +1,5 @@
 #include "RenderingPipeline.h"
+#include <cmath>
 
 Matrix4x4 MakePerspectiveFovMatrix(const float fovY, const float aspectRatio, const float nearClip, const float farClip) noexcept {
     const float cot = 1.0f / std::tan(fovY / 2.0f);

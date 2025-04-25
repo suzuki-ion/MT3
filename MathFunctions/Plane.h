@@ -37,22 +37,22 @@ struct Plane {
     /// @brief 球との衝突判定
     /// @param sphere 衝突判定を行う球
     /// @return 衝突しているかどうか
-    bool IsCollision(const Sphere &sphere) const;
+    [[nodiscard]] bool IsCollision(const Sphere &sphere) const;
 
     /// @brief 直線との衝突判定
     /// @param line 衝突判定を行う線分
     /// @return 衝突しているかどうか
-    bool IsCollision(const Line &line) const;
+    [[nodiscard]] bool IsCollision(const Line &line) const;
 
     /// @brief 半直線との衝突判定
     /// @param ray 衝突判定を行う線分
     /// @return 衝突しているかどうか
-    bool IsCollision(const Ray &ray) const;
+    [[nodiscard]] bool IsCollision(const Ray &ray) const;
 
     /// @brief 線分との衝突判定
     /// @param segment 衝突判定を行う線分
     /// @return 衝突しているかどうか
-    bool IsCollision(const Segment &segment) const;
+    [[nodiscard]] bool IsCollision(const Segment &segment) const;
 
     /// @brief 平面を描画する
     /// @param viewProjectionMatrix ビュー投影行列

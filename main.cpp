@@ -15,6 +15,7 @@
 #include "MathFunctions/Lines.h"
 #include "MathFunctions/Plane.h"
 #include "MathFunctions/Triangle.h"
+#include "MathFunctions/AABB.h"
 
 //--------- カメラ ---------//
 #include "MathFunctions/Camera.h"
@@ -35,19 +36,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	//--------- 変数 ---------//
 
-    Vector3 cameraTranslate = { 0.0f, 0.0f, -8.0f };
-    Vector3 cameraRotate = { 0.3f, 0.0f, 0.0f };
-    Camera camera(cameraTranslate, cameraRotate, { 1.0f, 1.0f, 1.0f });
+    Camera camera(
+		{ 0.0f, 0.0f, -8.0f },
+		{ 0.3f, 0.0f, 0.0f },
+		{ 1.0f, 1.0f, 1.0f }
+	);
 
-    Triangle triangle{
-        { -1.0f, 0.0f, 0.0f },
-        { 0.0f, 1.0f, 0.0f },
-        { 1.0f, 0.0f, 0.0f }
-    };
-    Segment segment{
-        { 0.0f, 0.5f, -1.0f },
-        { 0.0f, 0.5f, 2.0f }
-    };
+	AABB aabb1(
+        { -0.5f, -0.5f, -0.5f },
+		{ 0.0f, 0.0f, 0.0f }
+	);
+    AABB aabb2(
+        { 0.2f, 0.2f, 0.2f },
+        { 1.0f, 1.0f, 1.0f }
+    );
     
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -63,18 +65,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		
         ImGui::Begin("window");
-        ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.1f);
-        ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.1f);
-        ImGui::DragFloat3("Triangle.v0", &triangle.vertices[0].x, 0.1f);
-        ImGui::DragFloat3("Triangle.v1", &triangle.vertices[1].x, 0.1f);
-        ImGui::DragFloat3("Triangle.v2", &triangle.vertices[2].x, 0.1f);
-        ImGui::DragFloat3("Segment.Origin", &segment.origin.x, 0.1f);
-        ImGui::DragFloat3("Segment.Diff", &segment.diff.x, 0.1f);
+        ImGui::DragFloat3("AABB1.Min", &aabb1.min.x, 0.1f);
+        ImGui::DragFloat3("AABB1.Max", &aabb1.max.x, 0.1f);
+        ImGui::DragFloat3("AABB2.Min", &aabb2.min.x, 0.1f);
+        ImGui::DragFloat3("AABB2.Max", &aabb2.max.x, 0.1f);
         ImGui::End();
 
+        // カメラの移動
+        camera.MoveToMouse(0.005f, 0.01f, 0.1f);
+
         // 各種行列の計算
-        camera.SetTranslate(cameraTranslate);
-        camera.SetRotate(cameraRotate);
         camera.CalculateMatrix();
 
 		///
@@ -85,14 +85,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓描画処理ここから
 		///
 
-        VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(camera.GetCameraMatrix().translateMatrix), "Camera Position");
+        VectorScreenPrintf(0, 0, camera.GetTranslate(), "Camera Position");
+        VectorScreenPrintf(0, 32, camera.GetRotate(), "Camera Rotation");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
-        if (segment.IsCollision(triangle)) {
-            segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), RED);
+        if (aabb1.IsCollision(aabb2)) {
+            aabb1.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), RED);
         } else {
-            segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
+            aabb1.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
         }
-        triangle.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
+        aabb2.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
 
 		///
 		/// ↑描画処理ここまで
