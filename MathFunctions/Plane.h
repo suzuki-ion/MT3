@@ -34,22 +34,22 @@ struct Plane {
     /// @param c 平面上の点c
     void Set(const Vector3 &a, const Vector3 &b, const Vector3 &c) noexcept;
 
-    /// @brief 平面と球の衝突判定
+    /// @brief 球との衝突判定
     /// @param sphere 衝突判定を行う球
     /// @return 衝突しているかどうか
     bool IsCollision(const Sphere &sphere) const;
 
-    /// @brief 平面と線分の衝突判定
+    /// @brief 直線との衝突判定
     /// @param line 衝突判定を行う線分
     /// @return 衝突しているかどうか
     bool IsCollision(const Line &line) const;
 
-    /// @brief 平面と線分の衝突判定
+    /// @brief 半直線との衝突判定
     /// @param ray 衝突判定を行う線分
     /// @return 衝突しているかどうか
     bool IsCollision(const Ray &ray) const;
 
-    /// @brief 平面と線分の衝突判定
+    /// @brief 線分との衝突判定
     /// @param segment 衝突判定を行う線分
     /// @return 衝突しているかどうか
     bool IsCollision(const Segment &segment) const;

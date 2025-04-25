@@ -30,10 +30,7 @@ bool Plane::IsCollision(const Line &line) const {
     if (dot == 0.0f) {
         return false;
     }
-    // tを求める
-    const float t = (distance - normal.Dot(line.origin)) / dot;
-    // tの値によって衝突しているかを判断する
-    return t >= 0.0f && t <= 1.0f;
+    return true;
 }
 
 bool Plane::IsCollision(const Ray &ray) const {

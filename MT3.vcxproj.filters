@@ -47,6 +47,9 @@
     <ClCompile Include="MathFunctions\Camera.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="MathFunctions\Triangle.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
@@ -62,5 +65,6 @@
     <ClInclude Include="MathFunctions\Sphere.h" />
     <ClInclude Include="MathFunctions\Lines.h" />
     <ClInclude Include="MathFunctions\Plane.h" />
+    <ClInclude Include="MathFunctions\Triangle.h" />
   </ItemGroup>
 </Project>

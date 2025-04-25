@@ -2,19 +2,20 @@
 #include "Vector3.h"
 #include "Matrix4x4.h"
 #include "Plane.h"
+#include "Triangle.h"
 #include <Novice.h>
 
+//==================================================
+// 直線
+//==================================================
+#pragma region Line
+
 bool Line::IsCollision(const Plane &plane) const {
-    // 法線と線の内積を求める
-    const float dot = plane.normal.Dot(diff);
-    // 0なら平行で衝突していない
-    if (dot == 0.0f) {
-        return false;
-    }
-    // tを求める
-    const float t = (plane.distance - plane.normal.Dot(origin)) / dot;
-    // tの値によって衝突しているかを判断する
-    return t >= 0.0f && t <= 1.0f;
+    return plane.IsCollision(*this);
+}
+
+bool Line::IsCollision(const Triangle &triangle) const {
+    return triangle.IsCollision(*this);
 }
 
 void Line::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const {
@@ -28,17 +29,19 @@ void Line::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewport
         color);
 }
 
+#pragma endregion
+
+//==================================================
+// 半直線
+//==================================================
+#pragma region Ray
+
 bool Ray::IsCollision(const Plane &plane) const {
-    // 法線と線の内積を求める
-    const float dot = plane.normal.Dot(diff);
-    // 0なら平行で衝突していない
-    if (dot == 0.0f) {
-        return false;
-    }
-    // tを求める
-    const float t = (plane.distance - plane.normal.Dot(origin)) / dot;
-    // tの値によって衝突しているかを判断する
-    return t >= 0.0f;
+    return plane.IsCollision(*this);
+}
+
+bool Ray::IsCollision(const Triangle &triangle) const {
+    return triangle.IsCollision(*this);
 }
 
 void Ray::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const {
@@ -52,17 +55,19 @@ void Ray::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportM
         color);
 }
 
+#pragma endregion
+
+//==================================================
+// 線分
+//==================================================
+#pragma region Segment
+
 bool Segment::IsCollision(const Plane &plane) const {
-    // 法線と線の内積を求める
-    const float dot = plane.normal.Dot(diff);
-    // 0なら平行で衝突していない
-    if (dot == 0.0f) {
-        return false;
-    }
-    // tを求める
-    const float t = (plane.distance - plane.normal.Dot(origin)) / dot;
-    // tの値によって衝突しているかを判断する
-    return t >= 0.0f && t <= 1.0f;
+    return plane.IsCollision(*this);
+}
+
+bool Segment::IsCollision(const Triangle &triangle) const {
+    return triangle.IsCollision(*this);
 }
 
 void Segment::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const {
@@ -75,3 +80,5 @@ void Segment::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewp
         static_cast<int>(end.y),
         color);
 }
+
+#pragma endregion

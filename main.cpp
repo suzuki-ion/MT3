@@ -1,13 +1,22 @@
 #include <Novice.h>
 #include <imgui.h>
+
+//--------- ベクトル・行列 ---------//
 #include "MathFunctions/Vector3.h"
 #include "MathFunctions/Matrix4x4.h"
 #include "MathFunctions/AffineMatrix.h"
+
+//--------- 描画関数 ---------//
 #include "MathFunctions/ScreenPrintf.h"
 #include "MathFunctions/DrawGrid.h"
+
+//--------- 図形 ---------//
 #include "MathFunctions/Sphere.h"
 #include "MathFunctions/Lines.h"
 #include "MathFunctions/Plane.h"
+#include "MathFunctions/Triangle.h"
+
+//--------- カメラ ---------//
 #include "MathFunctions/Camera.h"
 
 extern const float kWinWidth = 1280.0f;
@@ -30,13 +39,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
     Vector3 cameraRotate = { 0.3f, 0.0f, 0.0f };
     Camera camera(cameraTranslate, cameraRotate, { 1.0f, 1.0f, 1.0f });
 
-	Plane plane{
-		{ 0.0f, 1.0f, 0.0f },
-		1.0f
-	};
+    Triangle triangle{
+        { -1.0f, 0.0f, 0.0f },
+        { 0.0f, 1.0f, 0.0f },
+        { 1.0f, 0.0f, 0.0f }
+    };
     Segment segment{
-        { -0.45f, 0.41f, 0.0f },
-        { 1.0f, 0.58f, 0.0f }
+        { 0.0f, 0.5f, -1.0f },
+        { 0.0f, 0.5f, 2.0f }
     };
     
 	// ウィンドウの×ボタンが押されるまでループ
@@ -55,8 +65,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         ImGui::Begin("window");
         ImGui::DragFloat3("CameraTranslate", &cameraTranslate.x, 0.1f);
         ImGui::DragFloat3("CameraRotate", &cameraRotate.x, 0.1f);
-		ImGui::DragFloat3("Plane.Normal", &plane.normal.x, 0.1f);
-		ImGui::DragFloat("Plane.Distance", &plane.distance, 0.1f);
+        ImGui::DragFloat3("Triangle.v0", &triangle.vertices[0].x, 0.1f);
+        ImGui::DragFloat3("Triangle.v1", &triangle.vertices[1].x, 0.1f);
+        ImGui::DragFloat3("Triangle.v2", &triangle.vertices[2].x, 0.1f);
         ImGui::DragFloat3("Segment.Origin", &segment.origin.x, 0.1f);
         ImGui::DragFloat3("Segment.Diff", &segment.diff.x, 0.1f);
         ImGui::End();
@@ -76,13 +87,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         VectorScreenPrintf(0, 0, Vector3(0.0f).Transform(camera.GetCameraMatrix().translateMatrix), "Camera Position");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
-        
-        if (segment.IsCollision(plane)) {
+        if (segment.IsCollision(triangle)) {
             segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), RED);
         } else {
             segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
         }
-        plane.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
+        triangle.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
 
 		///
 		/// ↑描画処理ここまで

@@ -3,6 +3,7 @@
 
 struct Matrix4x4;
 struct Plane;
+struct Triangle;
 
 /// @brief 直線
 struct Line {
@@ -11,10 +12,15 @@ struct Line {
     // 終点への差分ベクトル
     Vector3 diff;
 
-    /// @brief 平面と線分の衝突判定
+    /// @brief 平面との衝突判定
     /// @param plane 衝突判定を行う平面
     /// @return 衝突しているかどうか
     bool IsCollision(const Plane &plane) const;
+
+    /// @brief 三角形との衝突判定
+    /// @param triangle 衝突判定を行う三角形
+    /// @return 衝突しているかどうか
+    bool IsCollision(const Triangle &triangle) const;
 
     /// @brief 線分を描画する
     /// @param viewProjectionMatrix ビュー投影行列
@@ -30,10 +36,15 @@ struct Ray {
     // 終点への差分ベクトル
     Vector3 diff;
 
-    /// @brief 平面と線分の衝突判定
+    /// @brief 平面との衝突判定
     /// @param plane 衝突判定を行う平面
     /// @return 衝突しているかどうか
     bool IsCollision(const Plane &plane) const;
+
+    /// @brief 三角形との衝突判定
+    /// @param triangle 衝突判定を行う三角形
+    /// @return 衝突しているかどうか
+    bool IsCollision(const Triangle &triangle) const;
 
     /// @brief 線分を描画する
     /// @param viewProjectionMatrix ビュー投影行列
@@ -49,10 +60,15 @@ struct Segment {
     // 終点への差分ベクトル
     Vector3 diff;
 
-    /// @brief 平面と線分の衝突判定
+    /// @brief 平面との衝突判定
     /// @param plane 衝突判定を行う平面
     /// @return 衝突しているかどうか
     bool IsCollision(const Plane &plane) const;
+
+    /// @brief 三角形との衝突判定
+    /// @param triangle 衝突判定を行う三角形
+    /// @return 衝突しているかどうか
+    bool IsCollision(const Triangle &triangle) const;
 
     /// @brief 線分を描画する
     /// @param viewProjectionMatrix ビュー投影行列
