@@ -3,6 +3,7 @@
 #include "Matrix4x4.h"
 #include "Plane.h"
 #include "Triangle.h"
+#include "CollisionFunctions.h"
 #include <Novice.h>
 
 //==================================================
@@ -11,11 +12,11 @@
 #pragma region Line
 
 bool Line::IsCollision(const Plane &plane) const {
-    return plane.IsCollision(*this);
+    return CollisionFunctions::IsCollision(plane, *this);
 }
 
 bool Line::IsCollision(const Triangle &triangle) const {
-    return triangle.IsCollision(*this);
+    return CollisionFunctions::IsCollision(triangle, *this);
 }
 
 void Line::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const {
@@ -37,11 +38,11 @@ void Line::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewport
 #pragma region Ray
 
 bool Ray::IsCollision(const Plane &plane) const {
-    return plane.IsCollision(*this);
+    return CollisionFunctions::IsCollision(plane, *this);
 }
 
 bool Ray::IsCollision(const Triangle &triangle) const {
-    return triangle.IsCollision(*this);
+    return CollisionFunctions::IsCollision(triangle, *this);
 }
 
 void Ray::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const {
@@ -63,11 +64,11 @@ void Ray::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportM
 #pragma region Segment
 
 bool Segment::IsCollision(const Plane &plane) const {
-    return plane.IsCollision(*this);
+    return CollisionFunctions::IsCollision(plane, *this);
 }
 
 bool Segment::IsCollision(const Triangle &triangle) const {
-    return triangle.IsCollision(*this);
+    return CollisionFunctions::IsCollision(triangle, *this);
 }
 
 void Segment::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const {

@@ -1,11 +1,12 @@
 ﻿#include "Plane.h"
 #include "Sphere.h"
 #include "Lines.h"
+#include "CollisionFunctions.h"
 #include <Novice.h>
 #include <cmath>
 
 void Plane::Set(const Vector3 &n, const Vector3 &p) noexcept {
-    this->normal = n;
+    normal = n;
     // 平面の距離を求める
     distance = n.Dot(p);
 }
@@ -18,46 +19,19 @@ void Plane::Set(const Vector3 &a, const Vector3 &b, const Vector3 &c) noexcept {
 }
 
 bool Plane::IsCollision(const Sphere &sphere) const {
-    // 球の中心から平面までの距離kを求める
-    const float k = normal.Dot(sphere.center) - distance;
-    // 球の半径と平面までの距離を比較する
-    return std::abs(k) <= sphere.radius;
+    return CollisionFunctions::IsCollision(sphere, *this);
 }
 
 bool Plane::IsCollision(const Line &line) const {
-    // 法線と線の内積を求める
-    const float dot = normal.Dot(line.diff);
-    // 0なら平行で衝突していない
-    if (dot == 0.0f) {
-        return false;
-    }
-    return true;
+    return CollisionFunctions::IsCollision(*this, line);
 }
 
 bool Plane::IsCollision(const Ray &ray) const {
-    // 法線と線の内積を求める
-    const float dot = normal.Dot(ray.diff);
-    // 0なら平行で衝突していない
-    if (dot == 0.0f) {
-        return false;
-    }
-    // tを求める
-    const float t = (distance - normal.Dot(ray.origin)) / dot;
-    // tの値によって衝突しているかを判断する
-    return t >= 0.0f;
+    return CollisionFunctions::IsCollision(*this, ray);
 }
 
 bool Plane::IsCollision(const Segment &segment) const {
-    // 法線と線の内積を求める
-    const float dot = normal.Dot(segment.diff);
-    // 0なら平行で衝突していない
-    if (dot == 0.0f) {
-        return false;
-    }
-    // tを求める
-    const float t = (distance - normal.Dot(segment.origin)) / dot;
-    // tの値によって衝突しているかを判断する
-    return t >= 0.0f && t <= 1.0f;
+    return CollisionFunctions::IsCollision(*this, segment);
 }
 
 void Plane::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const {

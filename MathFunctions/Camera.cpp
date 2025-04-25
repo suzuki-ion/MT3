@@ -76,8 +76,8 @@ void Camera::MoveToMouse(const float translateSpeed, const float rotateSpeed, co
     // ホイールで拡大縮小
     if (ImGui::GetIO().MouseWheel != 0.0f) {
         float mouseWheel = ImGui::GetIO().MouseWheel;
-        cameraScale_.x += mouseWheel * scaleSpeed;
-        cameraScale_.y += mouseWheel * scaleSpeed;
-        cameraScale_.z += mouseWheel * scaleSpeed;
+        cameraScale_.x -= mouseWheel * scaleSpeed;
+        cameraScale_.y -= mouseWheel * scaleSpeed;
+        cameraScale_.z -= mouseWheel * scaleSpeed;
     }
 }

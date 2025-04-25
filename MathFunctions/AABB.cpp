@@ -1,4 +1,6 @@
 #include "AABB.h"
+#include "Sphere.h"
+#include "CollisionFunctions.h"
 #include <algorithm>
 #include <Novice.h>
 
@@ -25,9 +27,11 @@ void AABB::Sort() noexcept {
 }
 
 bool AABB::IsCollision(const AABB &aabb) const noexcept {
-    return (min.x <= aabb.max.x && max.x >= aabb.min.x) &&
-        (min.y <= aabb.max.y && max.y >= aabb.min.y) &&
-        (min.z <= aabb.max.z && max.z >= aabb.min.z);
+    return CollisionFunctions::IsCollision(*this, aabb);
+}
+
+bool AABB::IsCollision(const Sphere &sphere) const noexcept {
+    return CollisionFunctions::IsCollision(*this, sphere);
 }
 
 void AABB::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int color) const noexcept {

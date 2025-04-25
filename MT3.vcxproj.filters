@@ -56,6 +56,9 @@
     <ClCompile Include="MathFunctions\AffineMatrix.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="MathFunctions\CollisionFunctions.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
@@ -73,5 +76,6 @@
     <ClInclude Include="MathFunctions\Plane.h" />
     <ClInclude Include="MathFunctions\Triangle.h" />
     <ClInclude Include="MathFunctions\AABB.h" />
+    <ClInclude Include="MathFunctions\CollisionFunctions.h" />
   </ItemGroup>
 </Project>

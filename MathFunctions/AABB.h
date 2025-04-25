@@ -1,6 +1,8 @@
 #pragma once
 #include "Vector3.h"
 
+struct Sphere;
+
 /// @brief 軸平行境界箱
 struct AABB {
     AABB() noexcept = default;
@@ -14,6 +16,11 @@ struct AABB {
     /// @param aabb 衝突判定を行うAABB
     /// @return 衝突しているかどうか
     [[nodiscard]] bool IsCollision(const AABB &aabb) const noexcept;
+
+    /// @brief 球との衝突判定
+    /// @param sphere 衝突判定を行う球
+    /// @return 衝突しているかどうか
+    [[nodiscard]] bool IsCollision(const Sphere &sphere) const noexcept;
 
     /// @brief AABBを描画する
     /// @param viewProjectionMatrix ビュー投影行列
