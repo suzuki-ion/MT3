@@ -8,18 +8,18 @@ struct Ray;
 struct Segment;
 
 struct Plane {
-    Plane() : normal{ 0.0f, 0.0f, 0.0f }, distance(0.0f) {}
-    Plane(const Vector3 &normal, float distance) :
+    Plane() noexcept : normal{ 0.0f, 0.0f, 0.0f }, distance(0.0f) {}
+    Plane(const Vector3 &normal, float distance) noexcept :
         normal(normal), distance(distance)
     {}
-    Plane(const Vector3 &normal, const Vector3 &point) :
+    Plane(const Vector3 &normal, const Vector3 &point) noexcept :
         normal(normal), distance(normal.Dot(point))
     {}
-    Plane(const Vector3 &a, const Vector3 &b, const Vector3 &c) :
+    Plane(const Vector3 &a, const Vector3 &b, const Vector3 &c) noexcept :
         normal((b - a).Cross(c - b).Normalize()),
         distance(normal.Dot(a))
     {}
-    Plane(const Plane &plane) :
+    Plane(const Plane &plane) noexcept :
         normal(plane.normal), distance(plane.distance)
     {}
 

@@ -5,11 +5,11 @@
 struct Plane;
 
 struct Sphere {
-    Sphere() : center{ 0.0f, 0.0f, 0.0f }, radius(1.0f) {}
-    Sphere(const Vector3 &center, float radius) :
+    Sphere() noexcept : center{ 0.0f, 0.0f, 0.0f }, radius(1.0f) {}
+    Sphere(const Vector3 &center, float radius) noexcept :
         center(center), radius(radius)
     {}
-    Sphere(const Sphere &sphere) :
+    Sphere(const Sphere &sphere) noexcept :
         center(sphere.center), radius(sphere.radius)
     {}
 
@@ -28,7 +28,7 @@ struct Sphere {
     /// @param viewportMatrix ビューポート行列
     /// @param kSubdivision 分割数
     /// @param color 色
-    void Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int kSubdivision, const unsigned int color);
+    void Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int kSubdivision, const unsigned int color) const;
 
     Vector3 center;
     float radius;

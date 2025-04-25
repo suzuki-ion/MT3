@@ -4,6 +4,7 @@
 struct Matrix4x4;
 struct Plane;
 struct Triangle;
+struct AABB;
 
 /// @brief 直線
 struct Line {
@@ -21,6 +22,11 @@ struct Line {
     /// @param triangle 衝突判定を行う三角形
     /// @return 衝突しているかどうか
     [[nodiscard]] bool IsCollision(const Triangle &triangle) const;
+
+    /// @brief AAABBとの衝突判定
+    /// @param aabb 衝突判定を行うAAABB
+    /// @return 衝突しているかどうか
+    [[nodiscard]] bool IsCollision(const AABB &aabb) const;
 
     /// @brief 線分を描画する
     /// @param viewProjectionMatrix ビュー投影行列
@@ -46,6 +52,11 @@ struct Ray {
     /// @return 衝突しているかどうか
     [[nodiscard]] bool IsCollision(const Triangle &triangle) const;
 
+    /// @brief AAABBとの衝突判定
+    /// @param aabb 衝突判定を行うAAABB
+    /// @return 衝突しているかどうか
+    [[nodiscard]] bool IsCollision(const AABB &aabb) const;
+
     /// @brief 線分を描画する
     /// @param viewProjectionMatrix ビュー投影行列
     /// @param viewportMatrix ビューポート行列
@@ -69,6 +80,11 @@ struct Segment {
     /// @param triangle 衝突判定を行う三角形
     /// @return 衝突しているかどうか
     [[nodiscard]] bool IsCollision(const Triangle &triangle) const;
+
+    /// @brief AAABBとの衝突判定
+    /// @param aabb 衝突判定を行うAAABB
+    /// @return 衝突しているかどうか
+    [[nodiscard]] bool IsCollision(const AABB &aabb) const;
 
     /// @brief 線分を描画する
     /// @param viewProjectionMatrix ビュー投影行列

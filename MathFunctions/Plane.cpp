@@ -1,6 +1,4 @@
 ﻿#include "Plane.h"
-#include "Sphere.h"
-#include "Lines.h"
 #include "CollisionFunctions.h"
 #include <Novice.h>
 #include <cmath>

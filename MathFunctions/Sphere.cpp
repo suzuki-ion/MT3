@@ -1,5 +1,4 @@
 ﻿#include "Sphere.h"
-#include "Plane.h"
 #include "CollisionFunctions.h"
 #include <cmath>
 #include <Novice.h>
@@ -13,7 +12,7 @@ bool Sphere::IsCollision(const Plane &plane) const {
     return CollisionFunctions::IsCollision(*this, plane);
 }
 
-void Sphere::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int kSubdivision, const unsigned int color) {
+void Sphere::Draw(const Matrix4x4 &viewProjectionMatrix, const Matrix4x4 &viewportMatrix, const unsigned int kSubdivision, const unsigned int color) const {
     const float kLonEvery = M_PI * 2.0f / static_cast<float>(kSubdivision);
     const float kLatEvery = M_PI / static_cast<float>(kSubdivision);
     

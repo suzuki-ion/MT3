@@ -44,11 +44,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
     AABB aabb(
         { -0.5f, -0.5f, -0.5f },
-        { 0.0f, 0.0f, 0.0f }
+        { 0.5f, 0.5f, 0.5f }
     );
-    Sphere sphere(
-        { 1.0f, 1.0f, 1.0f },
-        1.0f
+	Segment segment(
+        { -0.7f, 0.3f, 0.0f },
+        { 2.0f, -0.5f, 0.0f }
     );
     
 	// ウィンドウの×ボタンが押されるまでループ
@@ -67,8 +67,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         ImGui::Begin("window");
         ImGui::DragFloat3("AABB.Min", &aabb.min.x, 0.01f);
         ImGui::DragFloat3("AABB.Max", &aabb.max.x, 0.01f);
-        ImGui::DragFloat3("Sphere.Center", &sphere.center.x, 0.01f);
-        ImGui::DragFloat("Sphere.Radius", &sphere.radius, 0.01f);
+        ImGui::DragFloat3("Segment.Origin", &segment.origin.x, 0.01f);
+        ImGui::DragFloat3("Segment.Diff", &segment.diff.x, 0.01f);
         ImGui::End();
 
         // カメラの移動
@@ -88,12 +88,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         VectorScreenPrintf(0, 0, camera.GetTranslate(), "Camera Position");
         VectorScreenPrintf(0, 32, camera.GetRotate(), "Camera Rotation");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
-        if (aabb.IsCollision(sphere)) {
+        if (aabb.IsCollision(segment)) {
             aabb.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), RED);
         } else {
             aabb.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
         }
-        sphere.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, WHITE);
+        segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), WHITE);
 
 		///
 		/// ↑描画処理ここまで
