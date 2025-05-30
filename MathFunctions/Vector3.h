@@ -17,7 +17,6 @@ struct Vector3 {
     Vector3 &operator+=(const Vector3 &vector) noexcept;
     Vector3 &operator-=(const Vector3 &vector) noexcept;
     Vector3 &operator*=(const float scalar) noexcept;
-    Vector3 &operator*=(const Vector3 &vector) noexcept;
     Vector3 &operator/=(const float scalar);
     Vector3 &operator/=(const Vector3 &vector);
     bool operator==(const Vector3 &vector) const noexcept;
@@ -109,10 +108,6 @@ inline constexpr const Vector3 operator*(const Vector3 &vector, const float scal
 
 inline constexpr const Vector3 operator*(const float scalar, const Vector3 &vector) noexcept {
     return Vector3(vector.x * scalar, vector.y * scalar, vector.z * scalar);
-}
-
-inline constexpr const Vector3 operator*(const Vector3 &vector1, const Vector3 &vector2) noexcept {
-    return Vector3(vector1.x * vector2.x, vector1.y * vector2.y, vector1.z * vector2.z);
 }
 
 inline constexpr const Vector3 operator/(const Vector3 &vector, const float scalar) {

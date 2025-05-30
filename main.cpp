@@ -43,23 +43,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ 1.0f, 1.0f, 1.0f }
 	);
 
-	Vector3 translates[3] = {
-		{ 0.2f, 1.0f, 0.0f },
-		{ 0.4f, 0.0f, 0.0f },
-		{ 0.3f, 0.0f, 0.0f }
-    };
-
-	Vector3 rotates[3] = {
-        { 0.0f, 0.0f, -6.8f },
-        { 0.0f, 0.0f, -1.4f },
-        { 0.0f, 0.0f, 0.0f }
-    };
-
-	Vector3 scales[3] = {
-		{ 1.0f, 1.0f, 1.0f },
-        { 1.0f, 1.0f, 1.0f },
-        { 1.0f, 1.0f, 1.0f }
-    };
+    Vector3 a(0.2f, 1.0f, 0.0f);
+    Vector3 b(2.4f, 3.1f, 1.2f);
+	Vector3 c = a + b;
+	Vector3 d = a - b;
+    Vector3 e = a * 2.4f;
+    Vector3 rotate(0.4f, 1.43f, -0.8f);
+	Matrix4x4 rotateXMatrix;
+    rotateXMatrix.MakeRotateX(rotate.x);
+    Matrix4x4 rotateYMatrix;
+    rotateYMatrix.MakeRotateY(rotate.y);
+    Matrix4x4 rotateZMatrix;
+    rotateZMatrix.MakeRotateZ(rotate.z);
+    Matrix4x4 rotateMatrix = rotateXMatrix * rotateYMatrix * rotateZMatrix;
     
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
@@ -75,15 +71,16 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		
         ImGui::Begin("window");
-        ImGui::DragFloat3("translates[0]", &translates[0].x, 0.01f);
-        ImGui::DragFloat3("rotates[0]", &rotates[0].x, 0.01f);
-        ImGui::DragFloat3("scales[0]", &scales[0].x, 0.01f);
-        ImGui::DragFloat3("translates[1]", &translates[1].x, 0.01f);
-        ImGui::DragFloat3("rotates[1]", &rotates[1].x, 0.01f);
-        ImGui::DragFloat3("scales[1]", &scales[1].x, 0.01f);
-        ImGui::DragFloat3("translates[2]", &translates[2].x, 0.01f);
-        ImGui::DragFloat3("rotates[2]", &rotates[2].x, 0.01f);
-        ImGui::DragFloat3("scales[2]", &scales[2].x, 0.01f);
+        ImGui::Text("c:%f, %f, %f", c.x, c.y, c.z);
+        ImGui::Text("d:%f, %f, %f", d.x, d.y, d.z);
+        ImGui::Text("e:%f, %f, %f", e.x, e.y, e.z);
+		ImGui::Text(
+            "matrix:\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n",
+            rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3],
+            rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3],
+            rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3],
+            rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]
+        );
         ImGui::End();
 
         // カメラの移動
@@ -93,26 +90,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // 各種行列の計算
         camera.CalculateMatrix();
-
-		// 描画用の行列の計算
-		AffineMatrix localMatrix[3];
-		localMatrix[0].SetSRT(scales[0], rotates[0], translates[0]);
-        localMatrix[1].SetSRT(scales[1], rotates[1], translates[1]);
-        localMatrix[2].SetSRT(scales[2], rotates[2], translates[2]);
-        Matrix4x4 worldMatrix[3];
-		worldMatrix[0] = localMatrix[0].GetWorldMatrix();
-        worldMatrix[1] = localMatrix[1].GetWorldMatrix() * worldMatrix[0];
-        worldMatrix[2] = localMatrix[2].GetWorldMatrix() * worldMatrix[1];
-
-		Sphere sphere[3];
-        sphere[0] = Sphere(Vector3().Transform(worldMatrix[0]), 0.05f);
-        sphere[1] = Sphere(Vector3().Transform(worldMatrix[1]), 0.05f);
-        sphere[2] = Sphere(Vector3().Transform(worldMatrix[2]), 0.05f);
-
-		Segment segment[2] = {
-            { sphere[0].center, sphere[1].center - sphere[0].center },
-            { sphere[1].center, sphere[2].center - sphere[1].center }
-        };
 
 		///
 		/// ↑更新処理ここまで
@@ -125,11 +102,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         VectorScreenPrintf(0, 0, camera.GetTranslate(), "Camera Position");
         VectorScreenPrintf(0, 32, camera.GetRotate(), "Camera Rotation");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
-        segment[0].Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 0xFFFFFFFF);
-        segment[1].Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 0xFFFFFFFF);
-        sphere[0].Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, 0xFF0000FF);
-        sphere[1].Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, 0x00FF00FF);
-        sphere[2].Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, 0x0000FFFF);
 
 		///
 		/// ↑描画処理ここまで

@@ -39,13 +39,6 @@ Vector3 &Vector3::operator*=(const float scalar) noexcept {
     return *this;
 }
 
-Vector3 &Vector3::operator*=(const Vector3 &vector) noexcept {
-    x *= vector.x;
-    y *= vector.y;
-    z *= vector.z;
-    return *this;
-}
-
 Vector3 &Vector3::operator/=(const float scalar) {
     x /= scalar;
     y /= scalar;
