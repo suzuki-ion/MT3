@@ -21,6 +21,10 @@
 //--------- カメラ ---------//
 #include "MathFunctions/Camera.h"
 
+//--------- 物理 ---------//
+#include "Physics/Ball.h"
+#include "Physics/Spring.h"
+
 extern const float kWinWidth = 1280.0f;
 extern const float kWinHeight = 720.0f;
 const char kWindowTitle[] = "LE2A_12_スズキ_イオン_MT3";
@@ -43,20 +47,20 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ 1.0f, 1.0f, 1.0f }
 	);
 
-    Vector3 a(0.2f, 1.0f, 0.0f);
-    Vector3 b(2.4f, 3.1f, 1.2f);
-	Vector3 c = a + b;
-	Vector3 d = a - b;
-    Vector3 e = a * 2.4f;
-    Vector3 rotate(0.4f, 1.43f, -0.8f);
-	Matrix4x4 rotateXMatrix;
-    rotateXMatrix.MakeRotateX(rotate.x);
-    Matrix4x4 rotateYMatrix;
-    rotateYMatrix.MakeRotateY(rotate.y);
-    Matrix4x4 rotateZMatrix;
-    rotateZMatrix.MakeRotateZ(rotate.z);
-    Matrix4x4 rotateMatrix = rotateXMatrix * rotateYMatrix * rotateZMatrix;
-    
+	Spring spring{};
+    spring.anchor = { 0.0f, 0.0f, 0.0f };
+    spring.naturalLength = 1.0f;
+    spring.stiffness = 100.0f;
+	spring.dampingCoefficient = 2.0f;
+
+	Ball ball{};
+    ball.position = { 1.2f, 0.0f, 0.0f };
+    ball.mass = 2.0f;
+	ball.radius = 0.05f;
+	ball.color = 0x0000FFFF;
+
+    float deltaTime = 1.0f / 60.0f;
+
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0) {
 		// フレームの開始
@@ -69,18 +73,30 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		///
 		/// ↓更新処理ここから
 		///
+
+        Vector3 diff = ball.position - spring.anchor;
+        float length = diff.Length();
+		if (length != 0.0f) {
+            Vector3 direction = diff.Normalize();
+            Vector3 restPosition = spring.anchor + direction * spring.naturalLength;
+			Vector3 displacement = length * (ball.position - restPosition);
+            Vector3 restoringForce = -spring.stiffness * displacement;
+			Vector3 dampingForce = -spring.dampingCoefficient * ball.velocity;
+			Vector3 force = restoringForce + dampingForce;
+			ball.acceleration = force / ball.mass;
+		}
+
+		// 加速度も速度もどちらも秒を基準とした考えである
+		// それが、1/60秒間(deltaTime)適用される
+        ball.velocity += ball.acceleration * deltaTime;
+        ball.position += ball.velocity * deltaTime;
 		
         ImGui::Begin("window");
-        ImGui::Text("c:%f, %f, %f", c.x, c.y, c.z);
-        ImGui::Text("d:%f, %f, %f", d.x, d.y, d.z);
-        ImGui::Text("e:%f, %f, %f", e.x, e.y, e.z);
-		ImGui::Text(
-            "matrix:\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n%f, %f, %f, %f\n",
-            rotateMatrix.m[0][0], rotateMatrix.m[0][1], rotateMatrix.m[0][2], rotateMatrix.m[0][3],
-            rotateMatrix.m[1][0], rotateMatrix.m[1][1], rotateMatrix.m[1][2], rotateMatrix.m[1][3],
-            rotateMatrix.m[2][0], rotateMatrix.m[2][1], rotateMatrix.m[2][2], rotateMatrix.m[2][3],
-            rotateMatrix.m[3][0], rotateMatrix.m[3][1], rotateMatrix.m[3][2], rotateMatrix.m[3][3]
-        );
+        if (ImGui::Button("Start")) {
+            // ボールの初期位置に戻す
+            ball.position = { 1.2f, 0.0f, 0.0f };
+            ball.velocity = { 0.0f, 0.0f, 0.0f };
+        }
         ImGui::End();
 
         // カメラの移動
@@ -90,6 +106,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // 各種行列の計算
         camera.CalculateMatrix();
+
+		// 描画用の球体と線
+        Sphere sphere(ball.position, ball.radius);
+        Segment segment(spring.anchor, ball.position - spring.anchor);
 
 		///
 		/// ↑更新処理ここまで
@@ -102,6 +122,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         VectorScreenPrintf(0, 0, camera.GetTranslate(), "Camera Position");
         VectorScreenPrintf(0, 32, camera.GetRotate(), "Camera Rotation");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
+		segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 0xFFFFFFFF);
+		sphere.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, 0x0000FFFF);
 
 		///
 		/// ↑描画処理ここまで

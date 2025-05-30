@@ -81,5 +81,7 @@
     <ClInclude Include="MathFunctions\AABB.h" />
     <ClInclude Include="MathFunctions\CollisionFunctions.h" />
     <ClInclude Include="MathFunctions\Bezier.h" />
+    <ClInclude Include="Physics\Spring.h" />
+    <ClInclude Include="Physics\Ball.h" />
   </ItemGroup>
 </Project>
