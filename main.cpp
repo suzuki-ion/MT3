@@ -1,5 +1,6 @@
 #include <Novice.h>
 #include <imgui.h>
+#include <cmath>
 
 //--------- ベクトル・行列 ---------//
 #include "MathFunctions/Vector3.h"
@@ -47,17 +48,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ 1.0f, 1.0f, 1.0f }
 	);
 
-	Spring spring{};
-    spring.anchor = { 0.0f, 0.0f, 0.0f };
-    spring.naturalLength = 1.0f;
-    spring.stiffness = 100.0f;
-	spring.dampingCoefficient = 2.0f;
-
-	Ball ball{};
-    ball.position = { 1.2f, 0.0f, 0.0f };
-    ball.mass = 2.0f;
-	ball.radius = 0.05f;
-	ball.color = 0x0000FFFF;
+	bool isRotate = false;
+	float angle = 0.0f;
+	float angularVelocity = 3.14f;
+	float angularRadius = 0.8f;
+	Sphere sphere;
+	sphere.radius = 0.05f;
 
     float deltaTime = 1.0f / 60.0f;
 
@@ -74,30 +70,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		/// ↓更新処理ここから
 		///
 
-        Vector3 diff = ball.position - spring.anchor;
-        float length = diff.Length();
-		if (length != 0.0f) {
-            Vector3 direction = diff.Normalize();
-            Vector3 restPosition = spring.anchor + direction * spring.naturalLength;
-			Vector3 displacement = length * (ball.position - restPosition);
-            Vector3 restoringForce = -spring.stiffness * displacement;
-			Vector3 dampingForce = -spring.dampingCoefficient * ball.velocity;
-			Vector3 force = restoringForce + dampingForce;
-			ball.acceleration = force / ball.mass;
-		}
-
-		// 加速度も速度もどちらも秒を基準とした考えである
-		// それが、1/60秒間(deltaTime)適用される
-        ball.velocity += ball.acceleration * deltaTime;
-        ball.position += ball.velocity * deltaTime;
-		
         ImGui::Begin("window");
         if (ImGui::Button("Start")) {
-            // ボールの初期位置に戻す
-            ball.position = { 1.2f, 0.0f, 0.0f };
-            ball.velocity = { 0.0f, 0.0f, 0.0f };
+			isRotate = true;
         }
         ImGui::End();
+
+		if (isRotate) {
+			angle += angularVelocity * deltaTime;
+		}
+		sphere.center.x = std::cos(angle) * angularRadius;
+		sphere.center.y = std::sin(angle) * angularRadius;
+		sphere.center.z = 0.0f;
 
         // カメラの移動
 		if (!ImGui::IsAnyItemActive()) {
@@ -106,10 +90,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         // 各種行列の計算
         camera.CalculateMatrix();
-
-		// 描画用の球体と線
-        Sphere sphere(ball.position, ball.radius);
-        Segment segment(spring.anchor, ball.position - spring.anchor);
 
 		///
 		/// ↑更新処理ここまで
@@ -122,7 +102,6 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         VectorScreenPrintf(0, 0, camera.GetTranslate(), "Camera Position");
         VectorScreenPrintf(0, 32, camera.GetRotate(), "Camera Rotation");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
-		segment.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 0xFFFFFFFF);
 		sphere.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, 0x0000FFFF);
 
 		///
