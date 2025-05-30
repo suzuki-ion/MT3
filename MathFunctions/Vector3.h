@@ -125,3 +125,7 @@ inline constexpr const Vector3 operator/(const Vector3 &vector1, const Vector3 &
 
 inline constexpr const Vector3 operator*(const Matrix4x4 &mat, const Vector3 &vector) noexcept;
 inline constexpr const Vector3 operator*(const Vector3 &vector, const Matrix4x4 &mat) noexcept;
+
+inline Vector3 Lerp(const Vector3 &start, const Vector3 &end, float t) noexcept {
+    return t * start + (1.0f - t) * end;
+}

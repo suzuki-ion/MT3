@@ -59,6 +59,9 @@
     <ClCompile Include="MathFunctions\CollisionFunctions.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="MathFunctions\Bezier.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
@@ -77,5 +80,6 @@
     <ClInclude Include="MathFunctions\Triangle.h" />
     <ClInclude Include="MathFunctions\AABB.h" />
     <ClInclude Include="MathFunctions\CollisionFunctions.h" />
+    <ClInclude Include="MathFunctions\Bezier.h" />
   </ItemGroup>
 </Project>

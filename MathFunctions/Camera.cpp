@@ -51,9 +51,7 @@ void Camera::SetWorldMatrix(const Matrix4x4 &worldMatrix) noexcept {
 }
 
 void Camera::CalculateMatrix() noexcept {
-    cameraMatrix_.SetScale(cameraScale_);
-    cameraMatrix_.SetRotate(cameraRotate_);
-    cameraMatrix_.SetTranslate(cameraTranslate_);
+    cameraMatrix_.SetSRT(cameraScale_, cameraRotate_, cameraTranslate_);
     viewMatrix_ = cameraMatrix_.InverseScale() * cameraMatrix_.InverseRotate() * cameraMatrix_.InverseTranslate();
     projectionMatrix_ = MakePerspectiveFovMatrix(0.45f, kWinWidth / kWinHeight, 0.1f, 100.0f);
     wvpMatrix_ = worldMatrix_ * (viewMatrix_ * projectionMatrix_);
