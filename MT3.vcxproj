@@ -124,6 +124,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="MathFunctions\Sphere.cpp" />
     <ClCompile Include="MathFunctions\Triangle.cpp" />
     <ClCompile Include="MathFunctions\Vector3.cpp" />
+    <ClCompile Include="Physics\Pendulum.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h" />
@@ -142,6 +143,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="MathFunctions\Triangle.h" />
     <ClInclude Include="MathFunctions\Vector3.h" />
     <ClInclude Include="Physics\Ball.h" />
+    <ClInclude Include="Physics\Pendulum.h" />
     <ClInclude Include="Physics\Spring.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

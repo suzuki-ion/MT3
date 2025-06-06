@@ -25,6 +25,7 @@
 //--------- 物理 ---------//
 #include "Physics/Ball.h"
 #include "Physics/Spring.h"
+#include "Physics/Pendulum.h"
 
 extern const float kWinWidth = 1280.0f;
 extern const float kWinHeight = 720.0f;
@@ -48,13 +49,15 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ 1.0f, 1.0f, 1.0f }
 	);
 
-	bool isRotate = false;
-	float angle = 0.0f;
-	float angularVelocity = 3.14f;
-	float angularRadius = 0.8f;
-	Sphere sphere;
-	sphere.radius = 0.05f;
+    Pendulum pendulum;
+    pendulum.anchor = { 0.0f, 1.0f, 0.0f };
+    pendulum.bob = { 0.0f, 0.0f, 0.0f };
+    pendulum.length = 0.8f;
+    pendulum.angle = 0.7f;
+    pendulum.angularVelocity = 0.0f;
+    pendulum.angularAcceleration = 0.0f;
 
+    bool isStart = false;
     float deltaTime = 1.0f / 60.0f;
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -72,16 +75,14 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         ImGui::Begin("window");
         if (ImGui::Button("Start")) {
-			isRotate = true;
+            isStart = true;
         }
         ImGui::End();
 
-		if (isRotate) {
-			angle += angularVelocity * deltaTime;
-		}
-		sphere.center.x = std::cos(angle) * angularRadius;
-		sphere.center.y = std::sin(angle) * angularRadius;
-		sphere.center.z = 0.0f;
+        // 振り子の更新
+        if (isStart) {
+            pendulum.CalculateAngle(deltaTime);
+        }
 
         // カメラの移動
 		if (!ImGui::IsAnyItemActive()) {
@@ -102,7 +103,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         VectorScreenPrintf(0, 0, camera.GetTranslate(), "Camera Position");
         VectorScreenPrintf(0, 32, camera.GetRotate(), "Camera Rotation");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
-		sphere.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, 0x0000FFFF);
+        pendulum.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 0xFFFFFFFF);
 
 		///
 		/// ↑描画処理ここまで
