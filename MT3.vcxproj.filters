@@ -65,6 +65,9 @@
     <ClCompile Include="Physics\Pendulum.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="Physics\ConicalPendulum.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\Adapter\Novice.h">
@@ -87,5 +90,6 @@
     <ClInclude Include="Physics\Spring.h" />
     <ClInclude Include="Physics\Ball.h" />
     <ClInclude Include="Physics\Pendulum.h" />
+    <ClInclude Include="Physics\ConicalPendulum.h" />
   </ItemGroup>
 </Project>

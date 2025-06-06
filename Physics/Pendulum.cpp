@@ -4,7 +4,10 @@
 #include <cmath>
 
 void Pendulum::CalculateAngle(const float deltaTime) {
-    angularAcceleration = (-9.8f / length) * std::sin(angle);
+    // 重力加速度
+    static const float g = 9.8f;
+
+    angularAcceleration = (-g / length) * std::sin(angle);
     angularVelocity += angularAcceleration * deltaTime;
     angle += angularVelocity * deltaTime;
 
