@@ -61,23 +61,23 @@ struct Vector3 {
     /// @brief 垂線を求める
     /// @param vector 垂線を求めるベクトル
     /// @return 垂線
-    [[nodiscard]] inline constexpr const Vector3 Rejection(const Vector3 &vector) const noexcept;
+    [[nodiscard]] Vector3 Rejection(const Vector3 &vector) const noexcept;
 
     /// @brief ベクトルを反射する
     /// @param normal 法線ベクトル
     /// @return 反射されたベクトル
-    [[nodiscard]] inline constexpr const Vector3 Refrection(const Vector3 &normal) const noexcept;
+    [[nodiscard]] Vector3 Refrection(const Vector3 &normal) const noexcept;
     
     /// @brief ベクトルを反射する
     /// @param normal 法線ベクトル
     /// @param eta 屈折率
     /// @return 反射されたベクトル
-    [[nodiscard]] inline constexpr const Vector3 Refrection(const Vector3 &normal, const float eta) const noexcept;
+    [[nodiscard]] Vector3 Refrection(const Vector3 &normal, const float eta) const noexcept;
 
     /// @brief ベクトル間の距離を計算する
     /// @param vector 距離を計算するベクトル
     /// @return ベクトル間の距離
-    [[nodiscard]] inline float Distance(const Vector3 &vector) const;
+    [[nodiscard]] float Distance(const Vector3 &vector) const;
 
     /// @brief ベクトルを行列で変換する
     /// @param mat 変換行列

@@ -104,24 +104,15 @@ Vector3 Vector3::Perpendicular() const noexcept {
     return Vector3(0.0f, -z, y);
 }
 
-inline constexpr const Vector3 Vector3::Rejection(const Vector3 &vector) const noexcept {
+Vector3 Vector3::Rejection(const Vector3 &vector) const noexcept {
     return *this - Projection(vector);
 }
 
-inline constexpr const Vector3 Vector3::Refrection(const Vector3 &normal) const noexcept {
-    return *this + (-2.0f * Dot(normal) * normal);
+Vector3 Vector3::Refrection(const Vector3 &normal) const noexcept {
+    return *this - 2.0f * Dot(normal) * normal;
 }
 
-inline constexpr const Vector3 Vector3::Refrection(const Vector3 &normal, const float eta) const noexcept {
-    const float cosTheta = Dot(normal);
-    const float k = 1.0f - eta * eta * (1.0f - cosTheta * cosTheta);
-    if (k < 0.0f) {
-        return Vector3(0.0f);
-    }
-    return *this * eta + (eta * cosTheta - std::sqrt(k)) * normal;
-}
-
-inline float Vector3::Distance(const Vector3 &vector) const {
+float Vector3::Distance(const Vector3 &vector) const {
     return (vector - *this).Length();
 }
 

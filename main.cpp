@@ -50,15 +50,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ 1.0f, 1.0f, 1.0f }
 	);
 
-    ConicalPendulum conicalPendulum;
-	conicalPendulum.anchor = { 0.0f, 1.0f, 0.0f };
-	conicalPendulum.bob = { 0.0f, 0.0f, 0.0f };
-	conicalPendulum.length = 0.8f;
-    conicalPendulum.halfApexAngle = 0.7f;
-	conicalPendulum.angle = 0.0f;
-	conicalPendulum.angularVelocity = 0.0f;
+	Plane plane;
+    plane.normal = Vector3(-0.2f, 0.9f, -0.3f).Normalize();
+    plane.distance = 0.0f;
 
-    bool isStart = false;
+    Ball ball;
+    ball.position = { 0.8f, 1.2f, 0.3f };
+    ball.acceleration = { 0.0f, -9.8f, 0.0f };
+    ball.velocity = { 0.0f, 0.0f, 0.0f };
+    ball.mass = 2.0f;
+    ball.radius = 0.05f;
+    ball.color = 0xFFFFFFFF;
+
     float deltaTime = 1.0f / 60.0f;
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -76,13 +79,19 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
         ImGui::Begin("window");
         if (ImGui::Button("Start")) {
-            isStart = true;
+			ball.position = { 0.8f, 1.2f, 0.3f };
+			ball.acceleration = { 0.0f, -9.8f, 0.0f };
+			ball.velocity = { 0.0f, 0.0f, 0.0f };
         }
         ImGui::End();
 
-        // 振り子の更新
-        if (isStart) {
-			conicalPendulum.CalculateAngle(deltaTime);
+        ball.velocity += ball.acceleration * deltaTime;
+        ball.position += ball.velocity * deltaTime;
+        if (plane.IsCollision(Sphere(ball.position, ball.radius))) {
+            Vector3 reflected = ball.velocity.Refrection(plane.normal);
+            Vector3 projectToNormal = reflected.Projection(plane.normal);
+            Vector3 movingDirection = reflected - projectToNormal;
+			ball.velocity = projectToNormal * 0.8f + movingDirection;
         }
 
         // カメラの移動
@@ -104,7 +113,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
         VectorScreenPrintf(0, 0, camera.GetTranslate(), "Camera Position");
         VectorScreenPrintf(0, 32, camera.GetRotate(), "Camera Rotation");
         DrawGrid(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 2.0f, 16);
-		conicalPendulum.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 0xFFFFFFFF);
+        plane.Draw(camera.GetWVPMatrix(), camera.GetViewportMatrix(), 0xFFFFFFFF);
+        Sphere(ball.position, ball.radius).Draw(
+            camera.GetWVPMatrix(), camera.GetViewportMatrix(), 16, ball.color);
 
 		///
 		/// ↑描画処理ここまで
